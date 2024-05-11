@@ -20,8 +20,6 @@ export default async function handler(req, res) {
       res.status(201).json(result.ops[0]);
     }
 
-
-    // Handle other CRUD operations (PUT, DELETE) similarly
   } catch (err) {
     console.log(err.stack);
     res.status(500).json({ message: 'Internal Server Error' });
