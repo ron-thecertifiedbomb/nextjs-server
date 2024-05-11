@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     } else if (req.method === 'POST') {
       const newPost = req.body;
       const result = await collection.insertOne(newPost);
-      res.status(201).json(result.ops[0]);
+      res.status(201).json(result);
     }
 
   } catch (err) {
