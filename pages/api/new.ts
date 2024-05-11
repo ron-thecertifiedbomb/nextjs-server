@@ -23,18 +23,18 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
     // Access the database and collection
     const db = client.db('my_cart_database');
-    const collection = db.collection('users'); // Update collection name if necessary
+    const collection = db.collection('storage'); // Update collection name if necessary
 
     // Extract user data from request body with default values
     const {
-      username = '',
-      password = '',
-      firstname = '',
-      lastname = '',
+      username = 'sadasdasd',
+      password = 'asdsd',
+      firstname = 'asdsd',
+      lastname = 'asds',
       dateofbirth = new Date(),
-      address = '',
-      contactno = '',
-      email = ''
+      address = 'asdsd',
+      contactno = 'dasds',
+      email = 'asdasd'
     } = request.body;
 
     // Check if the username or email already exists
