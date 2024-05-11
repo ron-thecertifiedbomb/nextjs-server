@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     await client.connect();
     console.log('Connected to MongoDB');
 
-    const db = client.db('my_cart_database.users');
+    const db = client.db('my_cart_database');
     const collection = db.collection('users');
 
     if (req.method === 'GET') {
