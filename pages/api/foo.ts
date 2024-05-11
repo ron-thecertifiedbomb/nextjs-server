@@ -14,10 +14,6 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const users = await collection.find({}).toArray();
       res.status(200).json(users);
-    } else if (req.method === 'POST') {
-      const newPost = req.body;
-      const result = await collection.insertOne(newPost);
-      res.status(201).json(result);
     }
 
   } catch (err) {
