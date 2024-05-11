@@ -27,14 +27,14 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
     // Extract user data from request body with default values
     const {
-      username = 'Satrian',
-      password = 'Cn31100146',
-      firstname = 'Kenshin',
-      lastname = 'Himura',
+      username = '',
+      password = '',
+      firstname = '',
+      lastname = '',
       dateofbirth = new Date(),
-      address = 'Japan',
-      contactno = '09913817033',
-      email = 'rs.sibunga@gmail.com'
+      address = '',
+      contactno = '',
+      email = ''
     } = request.body;
 
     // Check if the username or email already exists
