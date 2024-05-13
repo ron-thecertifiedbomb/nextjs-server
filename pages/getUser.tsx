@@ -10,7 +10,7 @@ interface User {
 }
 
 async function getData(): Promise<User[]> {
-  const res = await fetch('http://localhost:3000/api/getUser');
+  const res = await fetch('/api/getUser');
   
   if (!res.ok) {
     throw new Error('Failed to fetch data');
