@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 
 const CoffeeForm = ({ onSubmit }) => {
-
   const [coffee, setCoffee] = useState({
     name: '',
     description: '',
@@ -10,34 +9,20 @@ const CoffeeForm = ({ onSubmit }) => {
     ingredients: '',
     special_ingredient: '',
     prices: [
-      { size: 'S', price: '', currency: '$' },
-      { size: 'M', price: '', currency: '$' },
-      { size: 'L', price: '', currency: '$' },
+      { size: 'S', currency: '$' },
+      { size: 'M', currency: '$' },
+      { size: 'L', currency: '$' },
     ],
-    average_rating: '',
-    ratings_count: '',
-    favourite: false,
     type: '',
-    index: 0,
+    favourite: false,
   });
 
   const handleChange = (event) => {
-    
     const { name, value, type, checked } = event.target;
-    if (name.startsWith('price')) {
-      const index = parseInt(name.split('-')[1]);
-      const updatedPrices = [...coffee.prices];
-      updatedPrices[index].price = value;
-      setCoffee((prevCoffee) => ({
-        ...prevCoffee,
-        prices: updatedPrices,
-      }));
-    } else {
-      setCoffee((prevCoffee) => ({
-        ...prevCoffee,
-        [name]: type === 'checkbox' ? checked : value,
-      }));
-    }
+    setCoffee((prevCoffee) => ({
+      ...prevCoffee,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
   const handleSubmit = (event) => {
@@ -90,7 +75,6 @@ const CoffeeForm = ({ onSubmit }) => {
           fullWidth
           name={`price-${index}`}
           label={`Price (${price.size})`}
-          value={price.price}
           onChange={handleChange}
         />
       ))}

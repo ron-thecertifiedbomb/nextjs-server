@@ -22,10 +22,21 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
     // Access the database and collection
     const db = client.db('storage');
-    const collection = db.collection('coffee'); // Assuming the collection name is 'coffee'
+    const collection = db.collection('coffee'); 
 
     // Extract coffee data from the request body
     const coffeeData = request.body;
+
+    // Process price data
+    if (coffeeData && coffeeData.prices) {
+      coffeeData.prices.forEach((price, index) => {
+        const fieldName = `price-${index}`;
+        if (coffeeData[fieldName] !== undefined) {
+          price.price = coffeeData[fieldName];
+          delete coffeeData[fieldName]; // Remove the price field from the main coffee data object
+        }
+      });
+    }
 
     // Insert the coffee object into the collection
     await collection.insertOne(coffeeData);
