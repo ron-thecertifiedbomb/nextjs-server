@@ -10,6 +10,7 @@ interface User {
 }
 
 async function getData(): Promise<User[]> {
+  
   const res = await fetch('/api/getUser');
   
   if (!res.ok) {

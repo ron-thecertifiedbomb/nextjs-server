@@ -2,6 +2,7 @@ import React from 'react';
 import CoffeeForm from '../components/CoffeeForm';
 
 const CreateCoffeePage = () => {
+  
   const handleSubmit = async (coffeeData) => {
     try {
       const response = await fetch('/api/addNewData', {

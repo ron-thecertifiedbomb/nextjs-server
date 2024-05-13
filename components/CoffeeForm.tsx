@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 
 const CoffeeForm = ({ onSubmit }) => {
+
   const [coffee, setCoffee] = useState({
     name: '',
     description: '',
@@ -21,6 +22,7 @@ const CoffeeForm = ({ onSubmit }) => {
   });
 
   const handleChange = (event) => {
+    
     const { name, value, type, checked } = event.target;
     if (name.startsWith('price')) {
       const index = parseInt(name.split('-')[1]);
