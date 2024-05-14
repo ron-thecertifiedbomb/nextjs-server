@@ -28,15 +28,15 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     const coffeeData = request.body;
 
     // Process price data
-    if (coffeeData && coffeeData.prices) {
-      coffeeData.prices.forEach((price, index) => {
-        const fieldName = `price-${index}`;
-        if (coffeeData[fieldName] !== undefined) {
-          price.price = coffeeData[fieldName];
-          delete coffeeData[fieldName]; // Remove the price field from the main coffee data object
-        }
-      });
-    }
+    // if (coffeeData && coffeeData.prices) {
+    //   coffeeData.prices.forEach((price, index) => {
+    //     const fieldName = `price-${index}`;
+    //     if (coffeeData[fieldName] !== undefined) {
+    //       price.price = coffeeData[fieldName];
+    //       delete coffeeData[fieldName]; 
+    //     }
+    //   });
+    // }
 
     // Insert the coffee object into the collection
     await collection.insertOne(coffeeData);

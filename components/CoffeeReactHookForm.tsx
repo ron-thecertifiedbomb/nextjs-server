@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 
-const CoffeeForm = ({ onSubmit }) => {
+const ReactHookCoffeeForm = ({ onSubmit }) => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
   const onSubmitForm = (data) => {
@@ -64,4 +64,4 @@ const CoffeeForm = ({ onSubmit }) => {
   );
 };
 
-export default CoffeeForm;
+export default ReactHookCoffeeForm;
