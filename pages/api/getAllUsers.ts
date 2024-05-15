@@ -14,6 +14,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const users = await collection.find({}).toArray();
       res.status(200).json(users);
+      console.log(users)
     }
 
   } catch (err) {
