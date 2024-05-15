@@ -21,28 +21,11 @@ const ERROR_MESSAGES = {
   INTERNAL_ERROR: 'Internal Server Error',
 };
 
-// Middleware to handle CORS
-function corsMiddleware(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  // Respond to preflight OPTIONS request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  
-  next();
-}
-
 // Define the API route handler for POST requests
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   let client;
 
   try {
-    // Apply CORS middleware
-    corsMiddleware(request, response, () => {});
-
     // Connect to MongoDB
     client = await connectToDatabase();
 
