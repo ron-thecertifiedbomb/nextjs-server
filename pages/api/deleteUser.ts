@@ -1,6 +1,7 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import { MongoClient } from 'mongodb';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const uri = 'mongodb+srv://Ronchiko:Mybabe0814@atlascluster.rjfmjfq.mongodb.net/my_cart_database?retryWrites=true&w=majority';
   const client = new MongoClient(uri);
 
@@ -11,32 +12,30 @@ export default async function handler(req, res) {
     const db = client.db('storage');
     const collection = db.collection('users');
 
-    // Assuming userId is passed in the request query
-    const userId = req.query.userId;
+    if (req.method === 'DELETE') {
+      const { id } = req.body;
 
-    console.log(userId)
-    
-    // Check if userId is provided
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
+      // Assuming id is passed in the request body
+      if (!id) {
+        return res.status(400).json({ error: 'Item ID is required' });
+      }
+
+      // Delete item by ID
+      const deleteResult = await collection.deleteOne({ _id: id });
+
+      // Check if item was found and deleted
+      if (deleteResult.deletedCount === 0) {
+        return res.status(404).json({ error: 'Item not found' });
+      }
+
+      // Return success message
+      res.status(200).json({ message: 'Item deleted successfully' });
+    } else {
+      res.status(405).json({ message: 'Only DELETE requests are allowed' });
     }
-
-    // Convert userId string to ObjectId
-    const objectId = new ObjectId(userId);
-
-    // Delete user by userId
-    const deleteResult = await collection.deleteOne({ _id: objectId });
-
-    // Check if user was found and deleted
-    if (deleteResult.deletedCount === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Return success message
-    res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).json({ error: 'Failed to delete user' });
+    console.error('Error deleting item:', error);
+    res.status(500).json({ error: 'Failed to delete item' });
   } finally {
     await client.close();
   }
