@@ -19,13 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!id) {
         return res.status(400).json({ error: 'Item ID is required' });
       }
-
-      // Convert string ID to ObjectId
       const objectId = new ObjectId(id as string);
 
-      // Delete item by ID
-      const deleteResult = await collection.deleteOne({ _id: objectId });
+      // Define the query
+      const query = { _id: objectId };
 
+      // Delete item by ID
+      const deleteResult = await collection.deleteOne(query);
       // Check if item was found and deleted
       if (deleteResult.deletedCount === 0) {
         return res.status(404).json({ error: 'Item not found' });
