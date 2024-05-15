@@ -22,6 +22,7 @@
     "micro-cors": "^0.1.1",
     "mongodb": "^6.6.1",
     "next": "13.0.4",
+    "next-connect": "^1.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.4",
