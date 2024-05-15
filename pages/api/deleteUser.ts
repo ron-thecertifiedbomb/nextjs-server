@@ -13,9 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const collection = db.collection('users');
 
     if (req.method === 'DELETE') {
-      const { id } = req.body;
-
-      console.log('id from the server', id )
+        const id = req.query.id;
 
       // Assuming id is passed in the request body
       if (!id) {
