@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const collection = db.collection('users');
 
     if (req.method === 'DELETE') {
-      const id = req.query.id; // Extract ID from query parameters
+      const id = '66442b28d59b34bffe9951c1'; // Extract ID from query parameters
       console.log('ID from the server', id);
       // Check if ID is provided
       if (!id) {
@@ -24,7 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const ObjectId = require("mongodb").ObjectId
 
       // Delete item by ID
-      const deleteResult = await collection.deleteOne({_id: new ObjectId(id)})
+      const deleteResult = await collection.deleteOne({ _id: new ObjectId(id) });
+
       // Check if item was found and deleted
       if (deleteResult.deletedCount === 0) {
         return res.status(404).json({ error: 'Item not found' });
