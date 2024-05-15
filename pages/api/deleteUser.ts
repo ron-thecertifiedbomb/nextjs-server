@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -13,15 +13,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const collection = db.collection('users');
 
     if (req.method === 'DELETE') {
-        const id = req.query.id;
+      const id = req.query.id; // Extract ID from query parameters
 
-      // Assuming id is passed in the request body
+      // Assuming id is passed as a query parameter
       if (!id) {
         return res.status(400).json({ error: 'Item ID is required' });
       }
 
+      // Convert string ID to ObjectId
+      const objectId = new ObjectId(id as string);
+
       // Delete item by ID
-      const deleteResult = await collection.deleteOne({ _id: id });
+      const deleteResult = await collection.deleteOne({ _id: objectId });
 
       // Check if item was found and deleted
       if (deleteResult.deletedCount === 0) {
