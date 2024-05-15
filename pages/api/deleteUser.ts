@@ -13,6 +13,8 @@ export default async function handler(req, res) {
 
     // Assuming userId is passed in the request query
     const userId = req.query.userId;
+
+    console.log(userId)
     
     // Check if userId is provided
     if (!userId) {
