@@ -11,7 +11,7 @@ interface User {
 
 async function getData(): Promise<User[]> {
   
-  const res = await fetch('/api/getUser');
+  const res = await fetch('/api/getAllUsers');
   
   if (!res.ok) {
     throw new Error('Failed to fetch data');
