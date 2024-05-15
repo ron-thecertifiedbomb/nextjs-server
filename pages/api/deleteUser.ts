@@ -15,6 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'DELETE') {
       const { id } = req.body;
 
+      console.log('id from the server', id )
+
       // Assuming id is passed in the request body
       if (!id) {
         return res.status(400).json({ error: 'Item ID is required' });
