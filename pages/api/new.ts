@@ -22,8 +22,8 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     client = await connectToDatabase();
 
     // Access the database and collection
-    const db = client.db('my_cart_database');
-    const collection = db.collection('storage'); // Update collection name if necessary
+    const db = client.db('storage');
+    const collection = db.collection('users'); // Update collection name if necessary
 
     // Extract user data from request body with default values
     const {
