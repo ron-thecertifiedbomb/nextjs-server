@@ -15,17 +15,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'DELETE') {
       const id = req.query.id; // Extract ID from query parameters
 
-      const toBeDeleted = '66442b28d59b34bffe9951c1'
-
       console.log(id)
 
       // Assuming id is passed as a query parameter
-      if (toBeDeleted) {
+      if (!id) {
         return res.status(400).json({ error: 'Item ID is required' });
       }
 
       // Convert string ID to ObjectId
-      const objectId = new ObjectId(toBeDeleted as string);
+      const objectId = new ObjectId(id as string);
 
       // Delete item by ID
       const deleteResult = await collection.deleteOne({ _id: objectId });
