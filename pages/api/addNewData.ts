@@ -22,7 +22,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
     // Access the database and collection
     const db = client.db('storage');
-    const collection = db.collection('coffee'); 
+    const collection = db.collection('users'); 
 
     // Extract coffee data from the request body
     const coffeeData = request.body;
@@ -42,7 +42,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     await collection.insertOne(coffeeData);
 
     // Return success response
-    response.status(201).json({ message: 'Coffee added successfully' });
+    response.status(201).json({ message: 'User added successfully' });
   } catch (error) {
     // If an error occurs, log the error and return an Internal Server Error response
     console.error('Error adding coffee:', error);
