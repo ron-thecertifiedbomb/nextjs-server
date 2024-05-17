@@ -16,6 +16,12 @@ export default async function handler(request: NextApiRequest, response: NextApi
       password = '',
     } = request.body;
 
+
+    if (!username || !password) {
+        return response.status(400).json({ error: "Username and password are required" });
+      }
+  
+
     const existingUser = await collection.findOne({ username });
 
     if (!existingUser) {
