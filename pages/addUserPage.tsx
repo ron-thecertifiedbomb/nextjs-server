@@ -26,7 +26,7 @@ const AddUserPage = () => {
 
   return (
     <div style={{ display: 'flex', width: '100%', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ width: 500, padding: 20, boxShadow: '0 0 10px rgba(0,0,0,0.1)', borderRadius: 8 }}>
+      <div style={{ width: 500, padding: 20, boxShadow: '0 0 10px rgba(0,0,0,0.1)', borderRadius: 8, paddingTop: 100 }}>
         <h1>Add New User</h1>
         <AddForm onSubmit={handleSubmit} />
       </div>

@@ -1,11 +1,23 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { storage } from '../firebase';
-import { ref, getDownloadURL, uploadBytesResumable, UploadTask } from "firebase/storage";
-import { TextField, Button } from '@mui/material';
+import { storage } from "../firebase";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  UploadTask,
+} from "firebase/storage";
+import { TextField, Button, Switch, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 interface User {
   name: string;
   description: string;
+  roasted: string;
+  ingredients: string;
+  special_ingredient: string;
+  average_rating: number;
+  ratings_count: string;
+  favourite: boolean;
+  type: string;
   imagelink_square: string | null;
   imagelink_portrait: string | null;
 }
@@ -23,8 +35,15 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
   const [isUploading2, setIsUploading2] = useState<boolean>(false);
 
   const [user, setUser] = useState<User>({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
+    roasted: "",
+    ingredients: "",
+    special_ingredient: "",
+    average_rating: 0,
+    ratings_count: "",
+    favourite: false,
+    type: "",
     imagelink_square: null,
     imagelink_portrait: null,
   });
@@ -33,7 +52,7 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
     const { name, value, type, checked } = event.target;
     setUser((prevUser) => ({
       ...prevUser,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -45,9 +64,12 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask: UploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on("state_changed",
+    uploadTask.on(
+      "state_changed",
       (snapshot) => {
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
         setProgresspercent1(progress);
       },
       (error) => {
@@ -75,9 +97,12 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
     const storageRef = ref(storage, `files/${file.name}`);
     const uploadTask: UploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on("state_changed",
+    uploadTask.on(
+      "state_changed",
       (snapshot) => {
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
         setProgresspercent2(progress);
       },
       (error) => {
@@ -109,8 +134,15 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
 
   const resetForm = () => {
     setUser({
-      name: '',
-      description: '',
+      name: "",
+      description: "",
+      roasted: "",
+      ingredients: "",
+      special_ingredient: "",
+      average_rating: 0,
+      ratings_count: "",
+      favourite: false,
+      type: "",
       imagelink_square: null,
       imagelink_portrait: null,
     });
@@ -120,13 +152,19 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
     setProgresspercent2(0);
     setIsUploading1(false);
     setIsUploading2(false);
-    const fileInputs = document.querySelectorAll('input[type="file"]') as NodeListOf<HTMLInputElement>;
-    fileInputs.forEach(input => input.value = '');
+    const fileInputs = document.querySelectorAll(
+      'input[type="file"]'
+    ) as NodeListOf<HTMLInputElement>;
+    fileInputs.forEach((input) => (input.value = ""));
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className='form' style={{ display: "flex", flexDirection: 'column', gap: 10 }}>
+      <form
+        onSubmit={handleSubmit}
+        className="form"
+        style={{ display: "flex", flexDirection: "column", gap: 10 }}
+      >
         <TextField
           fullWidth
           name="name"
@@ -143,30 +181,89 @@ const AddForm: React.FC<AddFormProps> = ({ onSubmit }) => {
           value={user.description}
           onChange={handleChange}
         />
-        <input type='file' onChange={handleFileChange1} />
+        <TextField
+          fullWidth
+          name="roasted"
+          label="Roasted"
+          value={user.roasted}
+          onChange={handleChange}
+        />
+        <TextField
+          fullWidth
+          name="ingredients"
+          label="Ingredients"
+          value={user.ingredients}
+          onChange={handleChange}
+        />
+        <TextField
+          fullWidth
+          name="special_ingredient"
+          label="Special ingredient"
+          value={user.special_ingredient}
+          onChange={handleChange}
+        />
+        <TextField
+          fullWidth
+          name="average_rating"
+          label="Average Rating"
+          value={user.average_rating}
+          onChange={handleChange}
+        />
+
+        <Switch
+          checked={user.favourite}
+          onChange={(e) =>
+            setUser((prevUser) => ({
+              ...prevUser,
+              favourite: e.target.checked,
+            }))
+          }
+          name="favourite"
+          color="primary"
+        />
+     <div style={{ marginBottom: '20px' }}>Favourite</div>
+
+
+        <FormControl fullWidth>
+          <InputLabel>Type</InputLabel>
+          <Select
+            value={user.type}
+            onChange={handleChange}
+            name="type"
+          >
+            <MenuItem value="Coffee">Coffee</MenuItem>
+            <MenuItem value="Beans">Beans</MenuItem>
+          </Select>
+        </FormControl>
+        <input type="file" onChange={handleFileChange1} />
         {isUploading1 && progresspercent1 > 0 && (
-          <div className='outerbar'>
-            <div className='innerbar' style={{ width: `${progresspercent1}%` }}>{progresspercent1}%</div>
+          <div className="outerbar">
+            <div className="innerbar" style={{ width: `${progresspercent1}%` }}>
+              {progresspercent1}%
+            </div>
           </div>
         )}
-        {imgUrl1 && (
-          <img src={imgUrl1} alt='uploaded file 1' height={200} />
-        )}
-        <input type='file' onChange={handleFileChange2} />
+        {imgUrl1 && <img src={imgUrl1} alt="uploaded file 1" height={200} />}
+        <input type="file" onChange={handleFileChange2} />
         {isUploading2 && progresspercent2 > 0 && (
-          <div className='outerbar'>
-            <div className='innerbar' style={{ width: `${progresspercent2}%` }}>{progresspercent2}%</div>
+          <div className="outerbar">
+            <div className="innerbar" style={{ width: `${progresspercent2}%` }}>
+              {progresspercent2}%
+            </div>
           </div>
         )}
-        {imgUrl2 && (
-          <img src={imgUrl2} alt='uploaded file 2' height={200} />
-        )}
-        <Button type='submit' variant="contained" color="primary" disabled={isUploading1 || isUploading2}>
+        {imgUrl2 && <img src={imgUrl2} alt="uploaded file 2" height={200} />}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isUploading1 || isUploading2}
+        >
           Upload
         </Button>
       </form>
     </div>
   );
-}
+};
 
 export default AddForm;

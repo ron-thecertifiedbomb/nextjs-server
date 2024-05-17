@@ -22,6 +22,7 @@
     "jsonwebtoken": "^8.5.1",
     "micro-cors": "^0.1.1",
     "mongodb": "^6.6.1",
+    "mongoose": "^8.4.0",
     "next": "13.0.4",
     "next-connect": "^1.0.0",
     "react": "18.2.0",
