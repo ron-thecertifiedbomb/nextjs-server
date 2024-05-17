@@ -45,7 +45,7 @@ const jwt = require('jsonwebtoken');
     };
 
     // Create a token with expiration of 1 day
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: "1h" });
+    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
     // // Set the token as an HTTP-only cookie
     // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
