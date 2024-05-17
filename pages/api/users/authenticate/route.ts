@@ -1,14 +1,12 @@
-
 import bcrypt from 'bcrypt';
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../../../dbConfig/dbConfig';
+import jwt from "jsonwebtoken"
 
-
-export default async function POST(request: NextApiRequest, response: NextApiResponse) {
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   let client;
 
   try {
-
     client = await connectToDatabase();
     const db = client.db('storage');
     const collection = db.collection('users');
@@ -16,48 +14,40 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     const {
       username = '',
       password = '',
-      email = ''
     } = request.body;
 
     const existingUser = await collection.findOne({ username });
-    const existingEmail = await collection.findOne({ email });
 
-    if (existingUser) {
-      console.error("Username already exists:", username);
-      return response.status(409).json({ error: "Username already exists" });
+    if (!existingUser) {
+      console.error("Username does not exist:", username);
+      return response.status(409).json({ error: "Username does not exist" });
     }
 
-    if (existingEmail) {
-      console.error("Email already exists:", email);
-      return response.status(409).json({ error: "Email already exists" });
+    const validPassword = await bcrypt.compare(password, existingUser.password);
+    if (!validPassword) {
+      return response.status(400).json({ error: "Invalid password" });
     }
 
+    const tokenData = {
+      id: existingUser._id,
+      username: existingUser.username,
+      email: existingUser.email
+    };
 
-    if (!password) {
-      console.error("Password is required");
-      return response.status(400).json({ error: "Password is required" });
-    }
+    // Create a token with expiration of 1 day
+    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: "1d" });
 
+    // Set the token as an HTTP-only cookie
+    response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-
-    await collection.insertOne({
-      username,
-      password: hashedPassword,
-      email,
+    // Create a JSON response indicating successful login
+    return response.json({
+      message: "Login successful",
+      success: true,
     });
 
-    // Return success response
-    response.status(201).json({ message: 'User profile created successfully' });
-  } catch (error) {
-
-    console.error('Error creating user profile:', error);
+  } catch (error: any) {
+    console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
-  } finally {
-
-    if (client) {
-      await client.close();
-    }
   }
 }
