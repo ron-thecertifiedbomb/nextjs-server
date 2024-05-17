@@ -38,20 +38,20 @@ const jwt = require('jsonwebtoken');
       return response.status(400).json({ error: "Invalid password" });
     }
 
-    // const tokenData = {
-    //   id: existingUser._id,
-    //   username: existingUser.username,
-    //   email: existingUser.email
-    // };
+    const tokenData = {
+      id: existingUser._id,
+      username: existingUser.username,
+      email: existingUser.email
+    };
 
     // Create a token with expiration of 1 day
-    const token = await jwt.sign({ userId: existingUser._id }, process.env.TOKEN_SECRET!, { expiresIn: "1h" });
+    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: "1h" });
 
     // // Set the token as an HTTP-only cookie
     // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
 
     // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, token });
+    response.status(200).json({ message: 'Authentication successful', token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
