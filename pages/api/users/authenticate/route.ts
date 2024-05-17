@@ -51,7 +51,7 @@ const jwt = require('jsonwebtoken');
     // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
 
     // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', token });
+    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
