@@ -34,17 +34,17 @@ export default async function handler(request: NextApiRequest, response: NextApi
     //   return response.status(400).json({ error: "Invalid password" });
     // }
 
-    const tokenData = {
-      id: existingUser._id,
-      username: existingUser.username,
-      email: existingUser.email
-    };
+    // const tokenData = {
+    //   id: existingUser._id,
+    //   username: existingUser.username,
+    //   email: existingUser.email
+    // };
 
-    // Create a token with expiration of 1 day
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: "1d" });
+    // // Create a token with expiration of 1 day
+    // const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, { expiresIn: "1d" });
 
-    // Set the token as an HTTP-only cookie
-    response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
+    // // Set the token as an HTTP-only cookie
+    // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
 
     // Create a JSON response indicating successful login
     return response.json({
