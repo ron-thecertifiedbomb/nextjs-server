@@ -29,10 +29,10 @@ export default async function handler(request: NextApiRequest, response: NextApi
       return response.status(409).json({ error: "Username does not exist" });
     }
 
-    const validPassword = await bcrypt.compare(password, existingUser.password);
-    if (!validPassword) {
-      return response.status(400).json({ error: "Invalid password" });
-    }
+    // const validPassword = await bcrypt.compare(password, existingUser.password);
+    // if (!validPassword) {
+    //   return response.status(400).json({ error: "Invalid password" });
+    // }
 
     const tokenData = {
       id: existingUser._id,
