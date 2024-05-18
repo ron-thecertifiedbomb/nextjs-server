@@ -12,21 +12,15 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("users");
 
-    const { filterKey, filterValue } = request.query;
+    const { name } = request.query;
 
-    if (typeof filterKey !== "string" || typeof filterValue !== "string") {
+    if (typeof name !== "string") {
       return response
         .status(400)
-        .json({ message: "Missing or invalid filterKey or filterValue" });
+        .json({ message: "Missing or invalid name parameter" });
     }
 
-    const filter = {
-      arrayField: {
-        $elemMatch: {
-          [filterKey]: filterValue,
-        },
-      },
-    };
+    const filter = { name };
 
     const documents = await collection.find(filter).toArray();
 
