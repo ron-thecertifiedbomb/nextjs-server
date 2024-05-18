@@ -19,9 +19,8 @@ export default async function handler(
         .status(400)
         .json({ message: "Missing or invalid name parameter" });
     }
-
     let filter = {};
-    if (name) {
+    if (name && name !== "All") { // Check if name is not "All"
       filter = { name };
     }
 
