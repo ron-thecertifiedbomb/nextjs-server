@@ -20,7 +20,10 @@ export default async function handler(
         .json({ message: "Missing or invalid name parameter" });
     }
 
-    const filter = { name };
+    let filter = {};
+    if (name) {
+      filter = { name };
+    }
 
     const documents = await collection.find(filter).toArray();
 
