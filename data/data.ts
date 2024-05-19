@@ -1,0 +1,67 @@
+export const productData = [
+    {
+      name: 'PlayStation 5',
+      brand: 'Sony',
+      price: 499,
+      quantity: 10,
+      category: 'gaming console',
+      specifications: {
+        processor: 'AMD Ryzen Zen 2',
+        graphics: 'AMD Radeon RDNA 2',
+        storage: '825GB SSD',
+        resolution: '4K',
+        maxFrameRate: '120fps',
+      },
+      includedItems: ['DualSense controller', 'HDMI cable', 'Power cord', 'User manual'],
+      availableColors: ['Black', 'White'],
+    },
+    {
+      name: 'Xbox Series X',
+      brand: 'Microsoft',
+      price: 499,
+      quantity: 10,
+      category: 'gaming console',
+      specifications: {
+        processor: 'Custom AMD Zen 2',
+        graphics: 'AMD RDNA 2',
+        storage: '1TB NVMe SSD',
+        resolution: '4K',
+        maxFrameRate: '120fps',
+      },
+      includedItems: ['Wireless Controller', 'HDMI cable', 'Power cord', 'User manual'],
+      availableColors: ['Black'],
+    },
+    {
+        name: 'Nintendo Switch',
+        brand: 'Nintendo',
+        price: 299,
+        quantity: 15,
+        category: 'Gaming Console',
+        specifications: {
+          processor: 'Custom NVIDIA Tegra',
+          graphics: 'NVIDIA GeForce',
+          storage: '32GB eMMC',
+          resolution: '720p',
+          maxFrameRate: '60fps',
+        },
+        includedItems: ['Joy-Con (L) and Joy-Con (R)', 'Joy-Con Grip', 'Dock', 'HDMI cable', 'Power adapter'],
+        availableColors: ['Neon Red/Neon Blue', 'Gray'],
+      },
+    {
+      name: 'Gaming PC',
+      brand: 'Custom',
+      price: 1500,
+      quantity: 5,
+      category: 'gaming desktop',
+      specifications: {
+        processor: 'Intel Core i9-10900K',
+        graphics: 'NVIDIA GeForce RTX 3080',
+        storage: '1TB NVMe SSD + 2TB HDD',
+        resolution: '4K',
+        maxFrameRate: '240fps',
+      },
+      includedItems: ['Gaming keyboard', 'Gaming mouse', 'Headset', 'Monitor'],
+      availableColors: ['Black'],
+    }
+  ];
+  
