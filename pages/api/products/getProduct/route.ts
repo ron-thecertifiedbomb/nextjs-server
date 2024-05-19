@@ -6,12 +6,14 @@ export default async function GET(request: NextApiRequest, response: NextApiResp
   let client;
 
   try {
-    const productId = '664a171ad1777761d1bcd44c'
+    const productId = request.query._id as string;
     client = await connectToDatabase();
     const db = client.db('storage');
     const collection = db.collection('products');
 
     const product = await collection.findOne({  _id: new ObjectId(productId) });
+
+    console.log(productId)
 
     if (!product) {
       response.status(404).json({ message: 'Product not found' });
