@@ -2,6 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../../../dbConfig/dbConfig';
 import { ObjectId } from 'mongodb';
 
+// Mock data for update
+const mockUpdateData = {
+  name: "Updated Product",
+  price: 99.99,
+  category: "Electronics",
+  // Add other fields as needed
+};
+
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   if (request.method !== 'PUT') {
     response.setHeader('Allow', ['PUT']);
@@ -16,11 +24,11 @@ export default async function handler(request: NextApiRequest, response: NextApi
     const db = client.db('storage');
     const collection = db.collection('products');
     const productId = request.query._id as string;
-    const updateData = JSON.parse(request.body);
 
+    // Instead of using request.body, use mockUpdateData
     const updatedProduct = await collection.findOneAndUpdate(
       { _id: new ObjectId(productId) },
-      { $set: updateData },
+      { $set: mockUpdateData },
       { returnDocument: 'after' }
     );
 
