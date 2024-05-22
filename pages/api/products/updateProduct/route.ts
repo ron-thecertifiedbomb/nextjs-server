@@ -31,23 +31,22 @@ export default async function handler(
     const collection = db.collection("products");
     const productId = request.query._id as string;
 
-    // Find the product in the database
     const existingProduct = await collection.findOne({ _id: new ObjectId(productId) });
 
-    // If the product doesn't exist, return an appropriate response
+  
     if (!existingProduct) {
       response.status(404).json({ message: "Product not found" });
       return;
     }
 
-    // Update the product
+   
     const updatedProduct = await collection.findOneAndUpdate(
       { _id: new ObjectId(productId) },
       { $set: mockProduct },
       { returnDocument: "after" }
     );
 
-    // Respond with the updated product
+  
     response.status(200).json({
       message: "Product updated successfully",
       updatedProduct: updatedProduct.value,
