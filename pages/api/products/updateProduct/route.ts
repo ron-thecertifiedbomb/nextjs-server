@@ -16,7 +16,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
     const db = client.db('storage');
     const collection = db.collection('products');
     const productId = request.query._id as string;
-    const updateData = request.body;
+    const updateData = JSON.parse(request.body);
 
     const updatedProduct = await collection.findOneAndUpdate(
       { _id: new ObjectId(productId) },
