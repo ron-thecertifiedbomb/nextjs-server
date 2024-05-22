@@ -29,7 +29,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
     client = await connectToDatabase();
     const db = client.db('storage');
     const collection = db.collection('products');
-    const productId = request.query._id as string;
+    const productId = '664a171ad1777761d1bcd44d';
     
     // Instead of using request.body, use mockUpdateData
     const updatedProduct = await collection.findOneAndUpdate(
