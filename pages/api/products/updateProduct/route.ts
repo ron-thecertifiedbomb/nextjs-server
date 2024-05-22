@@ -30,30 +30,31 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("products");
     const productId = request.query._id as string;
-    // const updateData = JSON.parse(request.body);
 
+    // Find the product in the database
+    const existingProduct = await collection.findOne({ _id: new ObjectId(productId) });
+
+    // If the product doesn't exist, return an appropriate response
+    if (!existingProduct) {
+      response.status(404).json({ message: "Product not found" });
+      return;
+    }
+
+    // Update the product
     const updatedProduct = await collection.findOneAndUpdate(
       { _id: new ObjectId(productId) },
       { $set: mockProduct },
       { returnDocument: "after" }
     );
 
-    if (!updatedProduct.value) {
-      response.status(404).json({ message: "Product not found" });
-      return;
-    }
-
-    response
-      .status(200)
-      .json({
-        message: "Product updated successfully",
-        updatedProduct: updatedProduct.value,
-      });
+    // Respond with the updated product
+    response.status(200).json({
+      message: "Product updated successfully",
+      updatedProduct: updatedProduct.value,
+    });
   } catch (error) {
     console.error("Error updating product:", error);
-    response
-      .status(500)
-      .json({ message: "Error updating product", error: error.message });
+    response.status(500).json({ message: "Error updating product", error: error.message });
   } finally {
     if (client) {
       await client.close();
