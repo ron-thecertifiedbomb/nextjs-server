@@ -11,17 +11,17 @@ const mockUpdateData = {
 };
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
-  if (request.method === 'GET') {
-    // Handle GET request
-    // For example, return a list of products
-    return response.status(200).json({ message: 'GET request is allowed' });
-  }
+  // if (request.method === 'GET') {
+  //   // Handle GET request
+  //   // For example, return a list of products
+  //   return response.status(200).json({ message: 'GET request is allowed' });
+  // }
 
-  if (request.method !== 'PUT') {
-    response.setHeader('Allow', ['PUT']);
-    response.status(405).end(`Method ${request.method} Not Allowed`);
-    return;
-  }
+  // if (request.method !== 'PUT') {
+  //   response.setHeader('Allow', ['PUT']);
+  //   response.status(405).end(`Method ${request.method} Not Allowed`);
+  //   return;
+  // }
 
   let client;
 
