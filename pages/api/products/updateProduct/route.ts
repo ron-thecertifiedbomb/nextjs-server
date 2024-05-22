@@ -2,6 +2,23 @@ import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../dbConfig/dbConfig";
 import { ObjectId } from "mongodb";
 
+const mockProduct = {
+  name: 'Xbox 360',
+  brand: 'Microsoft',
+  price: 499,
+  quantity: 10,
+  category: 'gaming console',
+  specifications: {
+    processor: 'Ronan',
+    graphics: 'Ronan',
+    storage: '1TB NVMe SSD',
+    resolution: '4K',
+    maxFrameRate: '120fps',
+  },
+  includedItems: ['Ronan', 'HDMI cable', 'Power cord', 'User manual'],
+  availableColors: ['Black'],
+};
+
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
@@ -13,11 +30,11 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("products");
     const productId = request.query._id as string;
-    const updateData = JSON.parse(request.body);
+    // const updateData = JSON.parse(request.body);
 
     const updatedProduct = await collection.findOneAndUpdate(
       { _id: new ObjectId(productId) },
-      { $set: updateData },
+      { $set: mockProduct },
       { returnDocument: "after" }
     );
 
