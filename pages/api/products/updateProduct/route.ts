@@ -3,11 +3,11 @@ import connectToDatabase from '../../../../dbConfig/dbConfig';
 import { ObjectId } from 'mongodb';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
-  // if (request.method !== 'PUT') {
-  //   response.setHeader('Allow', ['PUT']);
-  //   response.status(405).end(`Method ${request.method} Not Allowed`);
-  //   return;
-  // }
+  if (request.method !== 'PUT') {
+    response.setHeader('Allow', ['PUT']);
+    response.status(405).end(`Method ${request.method} Not Allowed`);
+    return;
+  }
 
   let client;
 
