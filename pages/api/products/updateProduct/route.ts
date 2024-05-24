@@ -16,6 +16,7 @@ export default async function handler(
     const productId = request.query._id as string;
     const updateData = JSON.parse(request.body);
 
+
     const existingProduct = await collection.findOne({
       _id: new ObjectId(productId),
     });
