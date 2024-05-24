@@ -9,15 +9,15 @@ import {
 import { TextField, Button, Switch, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 interface User {
-  name: string;
-  description: string;
-  roasted: string;
-  ingredients: string;
-  special_ingredient: string;
-  average_rating: number;
-  ratings_count: string;
-  favourite: boolean;
-  type: string;
+  // _id: string;
+  // description: string;
+  // roasted: string;
+  // ingredients: string;
+  // special_ingredient: string;
+  // average_rating: number;
+  // ratings_count: string;
+  // favourite: boolean;
+  // type: string;
   imagelink_square: string | null;
   imagelink_portrait: string | null;
 }
@@ -35,18 +35,21 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
   const [isUploading2, setIsUploading2] = useState<boolean>(false);
 
   const [user, setUser] = useState<User>({
-    name: "",
-    description: "",
-    roasted: "",
-    ingredients: "",
-    special_ingredient: "",
-    average_rating: 0,
-    ratings_count: "",
-    favourite: false,
-    type: "",
+   
+    // _id: '',
+    // roasted: "",
+    // ingredients: "",
+    // special_ingredient: "",
+    // average_rating: 0,
+    // ratings_count: "",
+    // favourite: false,
+    // type: "",
     imagelink_square: null,
     imagelink_portrait: null,
   });
+
+  console.log(user.imagelink_portrait)
+  console.log(user.imagelink_square)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
@@ -134,15 +137,15 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
 
   const resetForm = () => {
     setUser({
-      name: "",
-      description: "",
-      roasted: "",
-      ingredients: "",
-      special_ingredient: "",
-      average_rating: 0,
-      ratings_count: "",
-      favourite: false,
-      type: "",
+      // _id: "",
+      // description: "",
+      // roasted: "",
+      // ingredients: "",
+      // special_ingredient: "",
+      // average_rating: 0,
+      // ratings_count: "",
+      // favourite: false,
+      // type: "",
       imagelink_square: null,
       imagelink_portrait: null,
     });
@@ -165,13 +168,14 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
         className="form"
         style={{ display: "flex", flexDirection: "column", gap: 10 }}
       >
-        <TextField
+       {/* <TextField
           fullWidth
-          name="name"
-          label="Name"
-          value={user.name}
+          name="_id"
+          label="Product ID"
+          value={user._id}
           onChange={handleChange}
-        />
+        /> */}
+          {/*
         <TextField
           fullWidth
           multiline
@@ -234,7 +238,7 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
             <MenuItem value="Coffee">Coffee</MenuItem>
             <MenuItem value="Beans">Beans</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
         <input type="file" onChange={handleFileChange1} />
         {isUploading1 && progresspercent1 > 0 && (
           <div className="outerbar">
