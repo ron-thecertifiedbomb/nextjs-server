@@ -9,7 +9,6 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     client = await connectToDatabase();
     const db = client.db('storage');
     const collection = db.collection('products');
-
     await Promise.all(productData.map(product => collection.insertOne(product)));
 
 
