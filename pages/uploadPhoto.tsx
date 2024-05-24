@@ -3,27 +3,22 @@ import React, { useCallback } from "react";
 import UploadPhotoForm from "../components/UploadPhoto";
 
 const UploadPhotoPage = () => {
+  const productId = "6650011ab3f82d2c9af555f5";
 
-     const productId = '6650011ab3f82d2c9af555f3'
+  const url = `/api/products/updateProduct/route?_id=${productId}`;
 
-    // const url = '/api/products/updateProduct/route'
-
-   const url = `/api/products/updateProduct/route?_id=${productId}`
-
-// const url = '/api/products/updateProduct/route?_id=6650011ab3f82d2c9af555f3'
-
-    // http://localhost:3001/api/products/updateProduct/route?_id=6650011ab3f82d2c9af555f3
   const handleSubmit = useCallback(async (userData) => {
+    console.log("data from the component", JSON.stringify(userData));
 
-    console.log('url', url)
-    console.log('userdata', userData)
     try {
+      const updatedData = JSON.stringify(userData);
+
       const response = await fetch(url, {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(updatedData), 
       });
 
       if (!response.ok) {
@@ -45,7 +40,6 @@ const UploadPhotoPage = () => {
         height: "100vh",
         justifyContent: "center",
         alignItems: "center",
-        
       }}
     >
       <div
@@ -56,8 +50,8 @@ const UploadPhotoPage = () => {
           borderRadius: 8,
           display: "flex",
           flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <h1>Upload Image</h1>

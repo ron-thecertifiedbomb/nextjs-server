@@ -6,7 +6,15 @@ import {
   uploadBytesResumable,
   UploadTask,
 } from "firebase/storage";
-import { TextField, Button, Switch, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 interface User {
   // _id: string;
@@ -34,31 +42,6 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
   const [isUploading1, setIsUploading1] = useState<boolean>(false);
   const [isUploading2, setIsUploading2] = useState<boolean>(false);
 
-  const [user, setUser] = useState<User>({
-   
-    // _id: '',
-    // roasted: "",
-    // ingredients: "",
-    // special_ingredient: "",
-    // average_rating: 0,
-    // ratings_count: "",
-    // favourite: false,
-    // type: "",
-    imagelink_square: null,
-    imagelink_portrait: null,
-  });
-
-  console.log(user.imagelink_portrait)
-  console.log(user.imagelink_square)
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = event.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
   const handleFileChange1 = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -82,10 +65,6 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImgUrl1(downloadURL);
-          setUser((prevUser) => ({
-            ...prevUser,
-            imagelink_square: downloadURL,
-          }));
           setIsUploading1(false);
         });
       }
@@ -115,10 +94,6 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImgUrl2(downloadURL);
-          setUser((prevUser) => ({
-            ...prevUser,
-            imagelink_portrait: downloadURL,
-          }));
           setIsUploading2(false);
         });
       }
@@ -128,7 +103,10 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (imgUrl1 && imgUrl2) {
-      onSubmit(user);
+      onSubmit({
+        imagelink_square: imgUrl1,
+        imagelink_portrait: imgUrl2,
+      });
       resetForm();
     } else {
       alert("Please wait for both images to finish uploading.");
@@ -136,19 +114,6 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
   };
 
   const resetForm = () => {
-    setUser({
-      // _id: "",
-      // description: "",
-      // roasted: "",
-      // ingredients: "",
-      // special_ingredient: "",
-      // average_rating: 0,
-      // ratings_count: "",
-      // favourite: false,
-      // type: "",
-      imagelink_square: null,
-      imagelink_portrait: null,
-    });
     setImgUrl1(null);
     setImgUrl2(null);
     setProgresspercent1(0);
@@ -168,77 +133,6 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
         className="form"
         style={{ display: "flex", flexDirection: "column", gap: 10 }}
       >
-       {/* <TextField
-          fullWidth
-          name="_id"
-          label="Product ID"
-          value={user._id}
-          onChange={handleChange}
-        /> */}
-          {/*
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          name="description"
-          label="Description"
-          value={user.description}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          name="roasted"
-          label="Roasted"
-          value={user.roasted}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          name="ingredients"
-          label="Ingredients"
-          value={user.ingredients}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          name="special_ingredient"
-          label="Special ingredient"
-          value={user.special_ingredient}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          name="average_rating"
-          label="Average Rating"
-          value={user.average_rating}
-          onChange={handleChange}
-        />
-
-        <Switch
-          checked={user.favourite}
-          onChange={(e) =>
-            setUser((prevUser) => ({
-              ...prevUser,
-              favourite: e.target.checked,
-            }))
-          }
-          name="favourite"
-          color="primary"
-        />
-     <div style={{ marginBottom: '20px' }}>Favourite</div>
-
-
-        <FormControl fullWidth>
-          <InputLabel>Type</InputLabel>
-          <Select
-            value={user.type}
-            onChange={handleChange}
-            name="type"
-          >
-            <MenuItem value="Coffee">Coffee</MenuItem>
-            <MenuItem value="Beans">Beans</MenuItem>
-          </Select>
-        </FormControl> */}
         <input type="file" onChange={handleFileChange1} />
         {isUploading1 && progresspercent1 > 0 && (
           <div className="outerbar">
