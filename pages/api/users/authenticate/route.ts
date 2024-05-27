@@ -52,7 +52,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
         _id: existingUser._id
       },
       { 
-        $set: { lastLoggedIn: currentTime } 
+        $set: { lastLoggedIn: formattedLastLoggedIn } 
       },
       { 
         returnDocument: "after",
