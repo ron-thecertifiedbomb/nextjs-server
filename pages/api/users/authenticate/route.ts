@@ -37,6 +37,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
     };
 
     const currentTime = getCurrentTime();
+    const formattedLastLoggedIn = new Date(currentTime).toLocaleString();
 
     const result = await collection.findOneAndUpdate(
       {
@@ -55,14 +56,14 @@ export default async function handler(request: NextApiRequest, response: NextApi
       id: existingUser._id,
       username: existingUser.username,
       email: existingUser.email,
-      lastLoggedIn: currentTime // Update to use currentTime
+      lastLoggedIn: formattedLastLoggedIn // Update to use currentTime
     };
 
     // Create a token with expiration of 1 day
     const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
     // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: currentTime, token });
+    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: formattedLastLoggedIn, token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
