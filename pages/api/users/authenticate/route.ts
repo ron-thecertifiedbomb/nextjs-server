@@ -15,7 +15,7 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("users");
 
-    const { username, password, lastLoggedIn } = JSON.parse(request.body);
+    const { username, password } = JSON.parse(request.body);
 
     if (!username || !password) {
       return response
@@ -41,15 +41,22 @@ export default async function handler(
       email: existingUser.email,
     };
 
+    const getCurrentTime = (): number => {
+      return new Date().getTime();
+    };
+
+    const currentTime = getCurrentTime();
+
     await collection.findOneAndUpdate(
       {
         _id: ObjectId.createFromTime(
           Number(existingUser._id.toString().slice(0, 8))
         ),
       },
-      { $set: lastLoggedIn },
+      { $set: currentTime },
       { returnDocument: "after" }
     );
+
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
