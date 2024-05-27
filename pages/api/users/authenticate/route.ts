@@ -38,6 +38,27 @@ const jwt = require('jsonwebtoken');
       return response.status(400).json({ error: "Invalid password" });
     }
 
+    
+    const getCurrentTime = (): number => {
+      return new Date().getTime();
+    };
+
+    const currentTime = getCurrentTime();
+
+
+    const result = await collection.findOneAndUpdate(
+      {
+        _id: existingUser._id
+      },
+      { 
+        $set: { lastLoggedIn: currentTime } 
+      },
+      { 
+        returnDocument: "after",
+        upsert: true // Add this option to create the document if it doesn't exist
+      }
+    );
+
     const tokenData = {
       id: existingUser._id,
       username: existingUser.username,
