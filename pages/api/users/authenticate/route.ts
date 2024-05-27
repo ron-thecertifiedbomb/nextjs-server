@@ -46,6 +46,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
       second: 'numeric',
       hour12: true // Use 12-hour clock
     });
+    
     const result = await collection.findOneAndUpdate(
       {
         _id: existingUser._id
@@ -58,6 +59,10 @@ export default async function handler(request: NextApiRequest, response: NextApi
         upsert: true // Add this option to create the document if it doesn't exist
       }
     );
+
+    if (!result.value) {
+      throw new Error("Failed to update lastLoggedIn");
+    }
 
     const tokenData = {
       id: existingUser._id,
