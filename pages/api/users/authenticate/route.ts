@@ -37,8 +37,15 @@ export default async function handler(request: NextApiRequest, response: NextApi
     };
 
     const currentTime = getCurrentTime();
-    const formattedLastLoggedIn = new Date(currentTime).toLocaleString();
-
+    const formattedLastLoggedIn = new Date(currentTime).toLocaleString('en-PH', {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true // Use 12-hour clock
+    });
     const result = await collection.findOneAndUpdate(
       {
         _id: existingUser._id
