@@ -43,24 +43,24 @@ export default async function handler(
 
 
 
-    // const getCurrentTime = (): number => {
-    //   return new Date().getTime();
-    // };
+    const getCurrentTime = (): number => {
+      return new Date().getTime();
+    };
 
-    // const currentTime = getCurrentTime();
+    const currentTime = getCurrentTime();
 
-    // const result = await collection.findOneAndUpdate(
-    //   {
-    //     _id: existingUser._id
-    //   },
-    //   { $set: { lastLoggedIn: currentTime } },
-    //   { returnDocument: "after" }
-    // );
+    const result = await collection.findOneAndUpdate(
+      {
+        _id: existingUser._id
+      },
+      { $set: { lastLoggedIn: currentTime } },
+      { returnDocument: "after" }
+    );
 
 
-    //    if (!result.value) {
-    //     throw new Error("Failed to update lastLoggedIn");
-    //   }
+       if (!result.value) {
+        throw new Error("Failed to update lastLoggedIn");
+      }
 
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
