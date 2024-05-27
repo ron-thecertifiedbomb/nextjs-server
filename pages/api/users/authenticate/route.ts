@@ -47,15 +47,19 @@ export default async function handler(
 
     const currentTime = getCurrentTime();
 
-    await collection.findOneAndUpdate(
+    const result = await collection.findOneAndUpdate(
       {
-        _id: ObjectId.createFromTime(
-          Number(existingUser._id.toString().slice(0, 8))
-        ),
+        _id: existingUser._id
       },
       { $set: { lastLoggedIn: currentTime } },
       { returnDocument: "after" }
     );
+
+
+    if (!result.value) {
+      throw new Error("Failed to update lastLoggedIn");
+    }
+
 
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
