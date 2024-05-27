@@ -1,27 +1,30 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import connectToDatabase from "../../../../dbConfig/dbConfig";
-import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
-export default async function handler(
-  request: NextApiRequest,
-  response: NextApiResponse
-) {
+import { NextApiRequest, NextApiResponse } from 'next';
+import connectToDatabase from '../../../../dbConfig/dbConfig';
+
+
+export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   let client;
 
   try {
     client = await connectToDatabase();
-    const db = client.db("storage");
-    const collection = db.collection("users");
+    const db = client.db('storage');
+    const collection = db.collection('users');
 
-    const { username, password } = JSON.parse(request.body);
+    const {
+      username = '',
+      password = '',
+    } = request.body;
+
+
+    const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
     if (!username || !password) {
-      return response
-        .status(400)
-        .json({ error: "Username and password are required" });
-    }
+        return response.status(400).json({ error: "Username and password are required" });
+      }
+  
 
     const existingUser = await collection.findOne({ username });
 
@@ -38,51 +41,19 @@ export default async function handler(
     const tokenData = {
       id: existingUser._id,
       username: existingUser.username,
-      email: existingUser.email,
+      email: existingUser.email
     };
 
+    // Create a token with expiration of 1 day
+    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
+    // // Set the token as an HTTP-only cookie
+    // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
 
-    const getCurrentTime = (): number => {
-      return new Date().getTime();
-    };
-
-    // const currentTime = getCurrentTime();
-
-    // const result = await collection.findOneAndUpdate(
-    //   {
-    //     _id: existingUser._id
-    //   },
-    //   { 
-    //     $set: { lastLoggedIn: currentTime } 
-    //   },
-    //   { 
-    //     returnDocument: "after",
-    //     upsert: true // Add this option to create the document if it doesn't exist
-    //   }
-    // );
-    
-
-
-      //  if (!result.value) {
-      //   throw new Error("Failed to update lastLoggedIn");
-      // }
-
-    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
-      expiresIn: "1h",
-    });
-
-    response.status(200).json({
-      message: "Authentication successful",
-      userId: existingUser._id,
-      token,
-    });
+    // Create a JSON response indicating successful login
+    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, token });
   } catch (error: any) {
-    console.error("Error during login:", error);
-    response.status(500).json({ message: "Internal Server Error" });
-  } finally {
-    if (client) {
-      client.close();
-    }
+    console.error('Error during login:', error);
+    response.status(500).json({ message: 'Internal Server Error' });
   }
 }
