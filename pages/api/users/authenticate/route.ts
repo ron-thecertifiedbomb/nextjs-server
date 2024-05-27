@@ -1,7 +1,7 @@
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../../../dbConfig/dbConfig';
-
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   let client;
@@ -16,15 +16,9 @@ export default async function handler(request: NextApiRequest, response: NextApi
       password = '',
     } = request.body;
 
-
-    const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-
     if (!username || !password) {
-        return response.status(400).json({ error: "Username and password are required" });
-      }
-  
+      return response.status(400).json({ error: "Username and password are required" });
+    }
 
     const existingUser = await collection.findOne({ username });
 
@@ -38,13 +32,11 @@ const jwt = require('jsonwebtoken');
       return response.status(400).json({ error: "Invalid password" });
     }
 
-    
     const getCurrentTime = (): number => {
       return new Date().getTime();
     };
 
     const currentTime = getCurrentTime();
-
 
     const result = await collection.findOneAndUpdate(
       {
@@ -62,17 +54,15 @@ const jwt = require('jsonwebtoken');
     const tokenData = {
       id: existingUser._id,
       username: existingUser.username,
-      email: existingUser.email
+      email: existingUser.email,
+      lastLoggedIn: currentTime // Update to use currentTime
     };
 
     // Create a token with expiration of 1 day
     const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
-    // // Set the token as an HTTP-only cookie
-    // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
-
     // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, token });
+    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: currentTime, token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
