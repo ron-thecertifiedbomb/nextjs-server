@@ -53,9 +53,15 @@ export default async function handler(
       {
         _id: existingUser._id
       },
-      { $set: { lastLoggedIn: currentTime } },
-      { returnDocument: "after" }
+      { 
+        $set: { lastLoggedIn: currentTime } 
+      },
+      { 
+        returnDocument: "after",
+        upsert: true // Add this option to create the document if it doesn't exist
+      }
     );
+    
 
 
        if (!result.value) {
