@@ -1,30 +1,27 @@
+import { NextApiRequest, NextApiResponse } from "next";
+import connectToDatabase from "../../../../dbConfig/dbConfig";
+import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-import { NextApiRequest, NextApiResponse } from 'next';
-import connectToDatabase from '../../../../dbConfig/dbConfig';
-
-
-export default async function handler(request: NextApiRequest, response: NextApiResponse) {
+export default async function handler(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
   let client;
 
   try {
     client = await connectToDatabase();
-    const db = client.db('storage');
-    const collection = db.collection('users');
+    const db = client.db("storage");
+    const collection = db.collection("users");
 
-    const {
-      username = '',
-      password = '',
-    } = request.body;
-
-
-    const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
+    const { username, password, lastLoggedIn } = JSON.parse(request.body);
 
     if (!username || !password) {
-        return response.status(400).json({ error: "Username and password are required" });
-      }
-  
+      return response
+        .status(400)
+        .json({ error: "Username and password are required" });
+    }
 
     const existingUser = await collection.findOne({ username });
 
@@ -41,19 +38,33 @@ const jwt = require('jsonwebtoken');
     const tokenData = {
       id: existingUser._id,
       username: existingUser.username,
-      email: existingUser.email
+      email: existingUser.email,
     };
 
-    // Create a token with expiration of 1 day
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
+    await collection.findOneAndUpdate(
+      {
+        _id: ObjectId.createFromTime(
+          Number(existingUser._id.toString().slice(0, 8))
+        ),
+      },
+      { $set: lastLoggedIn },
+      { returnDocument: "after" }
+    );
+    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
+      expiresIn: "1h",
+    });
 
-    // // Set the token as an HTTP-only cookie
-    // response.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=86400`);
-
-    // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, token });
+    response.status(200).json({
+      message: "Authentication successful",
+      userId: existingUser._id,
+      token,
+    });
   } catch (error: any) {
-    console.error('Error during login:', error);
-    response.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error during login:", error);
+    response.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    if (client) {
+      client.close();
+    }
   }
 }
