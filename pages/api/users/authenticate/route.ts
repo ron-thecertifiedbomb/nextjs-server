@@ -53,7 +53,7 @@ export default async function handler(
           Number(existingUser._id.toString().slice(0, 8))
         ),
       },
-      { $set: currentTime },
+      { $set: { lastLoggedIn: currentTime } },
       { returnDocument: "after" }
     );
 
