@@ -39,7 +39,7 @@ export default async function POST(
         { userId: userId },
         {
           $push: {
-            CartItems: 
+            CartItems: [
               {
                 cartId,
                 name,
@@ -51,7 +51,7 @@ export default async function POST(
                 dateAdded,
                 timeAdded,
               },
-            
+            ],
           },
         }
       );
