@@ -40,7 +40,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
       await collection.updateOne(
         { _id: objectId },
-        { $push: { CartItems: {
+        { $push: { CartItems: [{
           name,
           price,
           quantity,
@@ -49,7 +49,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
           isSelected,
           dateAdded,
           timeAdded
-        }}}
+        }]}}
       );
 
       response.status(200).json({
