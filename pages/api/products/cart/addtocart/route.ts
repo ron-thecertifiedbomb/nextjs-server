@@ -31,13 +31,13 @@ export default async function POST(
 
     const collection = db.collection("cart");
 
-    const objectId = new ObjectId(userId);
 
-    const userCart = await collection.findOne({ userId: objectId });
+
+    const userCart = await collection.findOne({ userId: userId });
 
     if (userCart) {
       await collection.updateOne(
-        { userId: objectId },
+        { userId: userId },
         {
           $push: {
             CartItems: [
@@ -57,6 +57,7 @@ export default async function POST(
       );
 
       response.status(200).json({
+      
         message: "Cart item successfully added to user's cart",
         CartItems: {
           name,
