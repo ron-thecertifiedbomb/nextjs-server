@@ -13,27 +13,37 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
     console.log('Data to be inserted to MongoDB Database', cartData);
 
+    // Check if the item exists. If not, insert a new document.
     const existingItem = await collection.findOne({
       _id: new ObjectId(cartData._id),
     });
 
-    if (!existingItem) {
-      response.status(404).json({ message: 'Item not found' });
-      return;
+    if (existingItem) {
+      // Update existing item
+      const updatedItem = await collection.findOneAndUpdate(
+        { _id: new ObjectId(cartData._id) },
+        { $set: cartData },
+        { returnDocument: 'after' }
+      );
+
+      response.status(200).json({
+        message: 'Cart item successfully updated',
+        cartData: updatedItem.value,
+      });
+    } else {
+      // Insert new item
+      const newItem = await collection.insertOne({
+        ...cartData,
+        _id: new ObjectId(cartData._id),
+      });
+
+      response.status(201).json({
+        message: 'Cart item successfully added',
+        cartData: newItem.ops[0],
+      });
     }
-
-    const cartDataToBeInserted = await collection.findOneAndUpdate(
-      { _id: new ObjectId(cartData._id) },
-      { $set: cartData },
-      { returnDocument: 'after', upsert: true }
-    );
-
-    response.status(201).json({
-      message: 'Cart item successfully added',
-      cartDataToBeInserted: cartDataToBeInserted.value,
-    });
   } catch (error) {
-    console.error('Error inserting products:', error);
+    console.error('Error inserting cart item:', error);
     response.status(500).json({ message: 'Error inserting Cart item', error: error.message });
   } finally {
     if (client) {
