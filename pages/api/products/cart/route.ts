@@ -8,20 +8,42 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
   try {
     client = await connectToDatabase();
     const db = client.db('storage');
-    const cartData = JSON.parse(request.body);
     const collection = db.collection('cart');
+
+
+    const {
+      _id = '',
+      name = '',
+      CartItems = [
+        {
+          name: '',
+          price: '',
+          quantity: '',
+          totalOrderPrice: '',
+          quantityOrdered: '',
+          isSelected: '',
+          dateAdded: '',
+          timeAdded: '',
+        },
+      ],
+    } = JSON.parse(request.body);
+
+    const cartData = {
+      name,
+      CartItems,
+    };
 
     console.log('Data to be inserted to MongoDB Database', cartData);
 
     // Check if the item exists. If not, insert a new document.
     const existingItem = await collection.findOne({
-      _id: new ObjectId(cartData._id),
+      _id: new ObjectId(_id),
     });
 
     if (existingItem) {
       // Update existing item
       const updatedItem = await collection.findOneAndUpdate(
-        { _id: new ObjectId(cartData._id) },
+        { _id: new ObjectId(_id) },
         { $set: cartData },
         { returnDocument: 'after' }
       );
