@@ -14,6 +14,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
     const {
       username = '',
       password = '',
+      time = '',
     } = request.body;
 
     if (!username || !password) {
@@ -32,31 +33,31 @@ export default async function handler(request: NextApiRequest, response: NextApi
       return response.status(400).json({ error: "Invalid password" });
     }
 
-    const getCurrentTime = (): number => {
-      return new Date().getTime();
-    };
+    // const getCurrentTime = (): number => {
+    //   return new Date().getTime();
+    // };
 
-    const currentTime = getCurrentTime();
-    const formattedLastLoggedIn = new Date(currentTime).toLocaleString('en-PH', {
-      month: 'numeric',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      hour12: true // Use 12-hour clock
-    });
+    // const currentTime = getCurrentTime();
+    // const formattedLastLoggedIn = new Date(currentTime).toLocaleString('en-PH', {
+    //   month: 'numeric',
+    //   day: 'numeric',
+    //   year: 'numeric',
+    //   hour: 'numeric',
+    //   minute: 'numeric',
+    //   second: 'numeric',
+    //   hour12: true // Use 12-hour clock
+    // });
     
      await collection.findOneAndUpdate(
       {
         _id: existingUser._id
       },
       { 
-        $set: { lastLoggedIn: formattedLastLoggedIn } 
+        $set: { lastLoggedIn: time } 
       },
       { 
         returnDocument: "after",
-        upsert: true // Add this option to create the document if it doesn't exist
+        upsert: true 
       }
     );
 
@@ -66,14 +67,14 @@ export default async function handler(request: NextApiRequest, response: NextApi
       id: existingUser._id,
       username: existingUser.username,
       email: existingUser.email,
-      lastLoggedIn: formattedLastLoggedIn // Update to use currentTime
+      lastLoggedIn: time // Update to use currentTime
     };
 
     // Create a token with expiration of 1 day
     const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
     // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: formattedLastLoggedIn, token });
+    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: time, token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
