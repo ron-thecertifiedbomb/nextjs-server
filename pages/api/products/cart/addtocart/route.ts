@@ -15,7 +15,7 @@ export default async function POST(
     // Destructuring the request body
     const {
       userId = "",
-      CartItems: 
+      CartItems: [
         {
           cartId = '',
           name = "",
@@ -27,7 +27,7 @@ export default async function POST(
           dateAdded = "",
           timeAdded = "",
         },
-      
+      ],
     } = JSON.parse(request.body);
 
     const collection = db.collection("cart");
