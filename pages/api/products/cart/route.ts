@@ -56,7 +56,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
       // Insert new item
       const newItem = await collection.insertOne({
         ...cartData,
-        _id: new ObjectId(cartData._id),
+        _id: new ObjectId(_id),
       });
 
       response.status(201).json({
