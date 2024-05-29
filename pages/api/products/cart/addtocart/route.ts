@@ -15,6 +15,7 @@ export default async function POST(
     // Destructuring the request body
     const {
       userId = "",
+      id = '',
       CartItems: [
         {
           name = "",
@@ -43,6 +44,7 @@ export default async function POST(
             CartItems: [
               {
                 name,
+                id,
                 price,
                 quantity,
                 totalOrderPrice,

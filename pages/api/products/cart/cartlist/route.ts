@@ -1,14 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from "../../../../../dbConfig/dbConfig";
-import { ObjectId } from 'mongodb';
+
+
+
 
 export default async function POST(request: NextApiRequest, response: NextApiResponse) {
   let client;
 
   try {
     client = await connectToDatabase();
-    const db = client.db('your_database_name');
-    const collection = db.collection('your_collection_name');
+    const db = client.db('storage');
+    const collection = db.collection('cart');
 
    
     const { userId = '', CartItems = [] } = JSON.parse(request.body);
