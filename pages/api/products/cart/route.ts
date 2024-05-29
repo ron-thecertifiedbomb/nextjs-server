@@ -24,8 +24,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
       { _id: ObjectId.createFromTime(cartData._id) },
       { $set: cartData.value },
       { returnDocument: 'after' }
-    );
-
+    )
     // Assuming cartData is an array of items
     await Promise.all(cartData.map((item) => collection.insertOne(item)));
 
