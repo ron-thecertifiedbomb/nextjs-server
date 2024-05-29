@@ -12,7 +12,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     const collection = db.collection('cart');
 
 
-    console.error('Data to be instered to Mongd Database', cartData);
+    console.log('Data to be instered to Mongd Database', cartData);
 
     const existingItem = await collection.findOne({
       _id: ObjectId.createFromTime(cartData._id), 
