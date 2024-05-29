@@ -11,11 +11,10 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     const cartData = JSON.parse(request.body);
     const collection = db.collection('cart');
 
-
-    console.log('Data to be instered to Mongd Database', cartData);
+    console.log('Data to be inserted to MongoDB Database', cartData);
 
     const existingItem = await collection.findOne({
-      _id: ObjectId.createFromTime(cartData._id), 
+      _id: new ObjectId(cartData._id),
     });
 
     if (!existingItem) {
@@ -24,12 +23,10 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     }
 
     const cartDataToBeInserted = await collection.findOneAndUpdate(
-      { _id: ObjectId.createFromTime(cartData._id) },
-      { $set: cartData.value },
-      { returnDocument: 'after' }
-    )
-    // Assuming cartData is an array of items
-    await Promise.all(cartData.map((item) => collection.insertOne(item)));
+      { _id: new ObjectId(cartData._id) },
+      { $set: cartData },
+      { returnDocument: 'after', upsert: true }
+    );
 
     response.status(201).json({
       message: 'Cart item successfully added',
