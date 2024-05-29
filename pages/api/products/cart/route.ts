@@ -11,8 +11,19 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     
     // Destructuring the request body
     const {
-      userId = '', // Assuming the user's _id is passed along with the request
-      cartItem = {}, // Assuming the cart item data is passed along with the request
+      userId = '', 
+      CartItems: [
+        {
+          name = '',
+          price =  '',
+          quantity = '',
+          totalOrderPrice = '',
+          quantityOrdered = '',
+          isSelected = '',
+          dateAdded = '',
+          timeAdded = '',
+        },
+      ],
     } = JSON.parse(request.body);
 
     // Accessing the collection
@@ -25,15 +36,34 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     const userCart = await collection.findOne({ _id: objectId });
 
     if (userCart) {
-      // User's cart exists, push the new cart item to CartItems array
+     
+      
       await collection.updateOne(
         { _id: objectId },
-        { $push: { CartItems: cartItem } }
+        { $push: { CartItems: {
+          name,
+          price,
+          quantity,
+          totalOrderPrice,
+          quantityOrdered,
+          isSelected,
+          dateAdded,
+          timeAdded
+        }}}
       );
 
       response.status(200).json({
         message: 'Cart item successfully added to user\'s cart',
-        cartItem: cartItem,
+        cartItem: {
+          name,
+          price,
+          quantity,
+          totalOrderPrice,
+          quantityOrdered,
+          isSelected,
+          dateAdded,
+          timeAdded
+        },
       });
     } else {
       // User's cart does not exist, return an error
