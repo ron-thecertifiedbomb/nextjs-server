@@ -8,9 +8,8 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
   try {
     client = await connectToDatabase();
     const db = client.db('storage');
-    const collection = db.collection('cart');
-
-
+    
+    // Destructuring the request body with default values
     const {
       _id = '',
       name = '',
@@ -28,23 +27,29 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
       ],
     } = JSON.parse(request.body);
 
+    // Constructing the cartData object
     const cartData = {
+      _id,
       name,
       CartItems,
     };
 
+    // Accessing the collection
+    const collection = db.collection('cart');
+
     console.log('Data to be inserted to MongoDB Database', cartData);
 
-    // Check if the item exists. If not, insert a new document.
-    const existingItem = await collection.findOne({
-      _id: new ObjectId(_id),
-    });
+    // Creating ObjectId instance
+    const objectId = new ObjectId(_id);
+
+    // Checking if the item already exists
+    const existingItem = await collection.findOne({ _id: objectId });
 
     if (existingItem) {
-      // Update existing item
+      // Update existing item, excluding _id from $set operation
       const updatedItem = await collection.findOneAndUpdate(
-        { _id: new ObjectId(_id) },
-        { $set: cartData },
+        { _id: objectId },
+        { $set: { name, CartItems } }, // Do not include _id here
         { returnDocument: 'after' }
       );
 
@@ -55,8 +60,9 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     } else {
       // Insert new item
       const newItem = await collection.insertOne({
-        ...cartData,
-        _id: new ObjectId(_id),
+        _id: objectId,
+        name,
+        CartItems,
       });
 
       response.status(201).json({
