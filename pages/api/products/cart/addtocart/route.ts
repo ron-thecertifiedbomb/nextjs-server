@@ -15,7 +15,6 @@ export default async function POST(
     // Destructuring the request body
     const {
       userId = "",
-      id = '',
       CartItems: [
         {
           name = "",
@@ -34,17 +33,16 @@ export default async function POST(
 
     const objectId = new ObjectId(userId);
 
-    const userCart = await collection.findOne({ _id: objectId });
+    const userCart = await collection.findOne({ userId: objectId });
 
     if (userCart) {
       await collection.updateOne(
-        { _id: objectId },
+        { userId: objectId },
         {
           $push: {
             CartItems: [
               {
                 name,
-                id,
                 price,
                 quantity,
                 totalOrderPrice,
