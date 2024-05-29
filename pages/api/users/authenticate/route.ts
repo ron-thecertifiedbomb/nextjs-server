@@ -15,6 +15,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
       username = '',
       password = '',
       time = '',
+      isLoggedIn = ''
     } = request.body;
 
     if (!username || !password) {
@@ -61,20 +62,17 @@ export default async function handler(request: NextApiRequest, response: NextApi
       }
     );
 
-    
-
     const tokenData = {
       id: existingUser._id,
       username: existingUser.username,
       email: existingUser.email,
-      lastLoggedIn: time // Update to use currentTime
+      lastLoggedIn: time ,
+      isLoggedIn: isLoggedIn
     };
 
-    // Create a token with expiration of 1 day
     const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
-    // Create a JSON response indicating successful login
-    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: time, token });
+    response.status(200).json({ message: 'Authentication successful', userId: existingUser._id, lastLoggedInTime: time, isLoggedIn: isLoggedIn, token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
