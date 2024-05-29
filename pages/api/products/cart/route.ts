@@ -37,7 +37,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
     if (userCart) {
      
-      
+
       await collection.updateOne(
         { _id: objectId },
         { $push: { CartItems: {
@@ -54,7 +54,7 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
 
       response.status(200).json({
         message: 'Cart item successfully added to user\'s cart',
-        cartItem: {
+        CartItems: {
           name,
           price,
           quantity,
