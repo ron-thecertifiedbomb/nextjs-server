@@ -10,22 +10,23 @@ export default async function POST(
 
   try {
     client = await connectToDatabase();
+
     const db = client.db("storage");
 
     const { data } = JSON.parse(request.body);
 
     const collection = db.collection("cart");
 
-    const ownerIdObject = new ObjectId(data.ownerId);
-    
-    const owner = await collection.findOne({ ownerId: ownerIdObject });
+    const ownerId =  data.ownerId;
+
+    const owner = await collection.findOne({ ownerId: ownerId });
 
     if (owner) {
       await collection.updateOne(
-        { ownerId: ownerIdObject },
+        { ownerId: ownerId },
         {
           $push: {
-            CartItems: data
+            CartItems: data,
           }
         }
       );
