@@ -24,7 +24,7 @@ export default async function POST(
       isSelected,
       dateAdded,
       timeAdded,
-    } = request.body;
+    } = JSON.parse(request.body);
   
 
 
