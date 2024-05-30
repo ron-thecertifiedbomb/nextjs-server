@@ -13,7 +13,7 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const  {ownerId}  = request.body;
+    const   {ownerId: ownerId }   = request.body;
 
     console.log("Owner ID:", ownerId);
 
