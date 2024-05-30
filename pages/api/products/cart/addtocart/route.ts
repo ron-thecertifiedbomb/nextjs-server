@@ -38,7 +38,7 @@ export default async function POST(
 
     const collection = db.collection("cart");
 
-    const owner = await collection.findOne({ ownerId: ownerId });
+    const owner = await collection.findOne({ ownerId: data.ownerId });
 
     if (owner) {
       const newItem = {
