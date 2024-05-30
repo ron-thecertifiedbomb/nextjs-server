@@ -51,7 +51,6 @@ export default async function POST(
     });
     const [date, time] = philippinesTime.split(", ");
 
-  
     const dateCreatedServer = new Date(date).toISOString();
     const timeCreatedServer = time;
 
@@ -106,10 +105,15 @@ export default async function POST(
       email: userEmail,
       message: "User profile created successfully",
     });
+
+
   } catch (error) {
+
     console.error("Error creating user profile:", error);
     response.status(500).json({ message: "Internal Server Error" });
+
   } finally {
+
     if (client) {
       await client.close();
     }
