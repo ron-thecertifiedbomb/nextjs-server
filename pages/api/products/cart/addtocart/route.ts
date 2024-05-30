@@ -13,11 +13,15 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const { data } = JSON.parse(request.body);
+    const requestBody = JSON.parse(request.body);
+    console.log("Request Body:", requestBody);
+
+    const { data } = requestBody;
+
+    const ownerId = data.ownerId;
+    console.log("Owner ID:", ownerId);
 
     const collection = db.collection("cart");
-
-    const ownerId =  data.ownerId;
 
     const owner = await collection.findOne({ ownerId: ownerId });
 
