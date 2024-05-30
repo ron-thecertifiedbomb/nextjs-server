@@ -15,6 +15,7 @@ export default async function POST(
 
     const requestBody = JSON.parse(request.body);
     console.log("Request Body:", requestBody);
+    console.log("Request Body ownerId :", requestBody.ownerId);
 
     const { cartId, ownerId, productId, name, price, quantity, totalOrderPrice, quantityOrdered, isSelected, dateAdded, timeAdded } = requestBody;
 
@@ -30,7 +31,6 @@ export default async function POST(
     if (owner) {
       const newItem = {
         cartId,
-        ownerId,
         productId,
         name,
         price,
