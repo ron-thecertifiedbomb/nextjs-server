@@ -11,7 +11,8 @@ export default async function POST(
   try {
     client = await connectToDatabase();
     const db = client.db("storage");
-    const collection = db.collection("users");
+    const usersCollection = db.collection("users");
+    const cartsCollection = db.collection("carts");
 
     const {
       firstname = "",
@@ -26,8 +27,8 @@ export default async function POST(
       timeCreated = "",
     } = request.body;
 
-    const existingUser = await collection.findOne({ username });
-    const existingEmail = await collection.findOne({ email });
+    const existingUser = await usersCollection.findOne({ username });
+    const existingEmail = await usersCollection.findOne({ email });
 
     if (existingUser) {
       console.error("Username already exists:", username);
@@ -46,7 +47,15 @@ export default async function POST(
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await collection.insertOne({
+    const philippinesTime = new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Manila",
+    });
+    const [date, time] = philippinesTime.split(", ");
+
+    const dateCreatedServer = new Date(date).toISOString();
+    const timeCreatedServer = time;
+
+    const newUser = {
       firstname,
       lastname,
       username,
@@ -55,13 +64,46 @@ export default async function POST(
       password: hashedPassword,
       gender,
       dateofbirth,
-      dateCreated,
-      timeCreated,
-    });
-   
+      dateCreated: dateCreatedServer,
+      timeCreated: timeCreatedServer,
+    };
 
-    
-    response.status(201).json({ message: "User profile created successfully" });
+    await usersCollection.insertOne(newUser);
+
+    const user = await usersCollection.findOne(
+      { username },
+      { projection: { firstname: 1, lastname: 1, email: 1 } }
+    );
+
+    if (!user) {
+      console.error("User not found with username:", username);
+      return response.status(404).json({ error: "User not found" });
+    }
+
+    const {
+      _id: _id,
+      firstname: userFirstname,
+      lastname: userLastname,
+      email: userEmail,
+    } = user;
+
+    const newCart = {
+      ownerId: _id,
+      firtname: userFirstname,
+      lastname,
+      userLastname,
+      CartItems: [],
+    };
+
+    await cartsCollection.insertOne(newCart);
+
+    response.status(201).json({
+      ownerId: _id,
+      firstname: userFirstname,
+      lastname: userLastname,
+      email: userEmail,
+      message: "User profile created successfully",
+    });
   } catch (error) {
     console.error("Error creating user profile:", error);
     response.status(500).json({ message: "Internal Server Error" });
