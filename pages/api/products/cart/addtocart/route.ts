@@ -24,36 +24,36 @@ export default async function POST(
         .json({ message: "Owner ID is missing in the request body" });
     }
 
-    // const {
-    //   ownerId,
-    //   productId,
-    //   name,
-    //   price,
-    //   quantity,
-    //   totalOrderPrice,
-    //   quantityOrdered,
-    //   isSelected,
-    //   dateAdded,
-    //   timeAdded,
-    // } = request.body;
+    const {
+      ownerId,
+      productId,
+      name,
+      price,
+      quantity,
+      totalOrderPrice,
+      quantityOrdered,
+      isSelected,
+      dateAdded,
+      timeAdded,
+    } = request.body;
 
     const collection = db.collection("cart");
 
-    const owner = await collection.findOne({ ownerId: new ObjectId(data.ownerId) });
+    const ownerID = await collection.findOne({ ownerId: new ObjectId(ownerId) });
 
-    if (owner) {
+    if (ownerId) {
       const newItem = {
         cartId: new ObjectId(),
-        ownerId: owner,
-        // productId,
-        // name,
-        // price,
-        // quantity,
-        // totalOrderPrice,
-        // quantityOrdered,
-        // isSelected,
-        // dateAdded,
-        // timeAdded,
+        ownerId: ownerID,
+        productId,
+        name,
+        price,
+        quantity,
+        totalOrderPrice,
+        quantityOrdered,
+        isSelected,
+        dateAdded,
+        timeAdded,
       };
 
       await collection.updateOne(
