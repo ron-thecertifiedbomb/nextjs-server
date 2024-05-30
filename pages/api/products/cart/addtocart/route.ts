@@ -16,6 +16,7 @@ export default async function POST(
       CartItems: [data],
     } = JSON.parse(request.body);
 
+
     const collection = db.collection("cart");
 
     const userCart = await collection.findOne({ ownerId: data._id });
@@ -30,16 +31,18 @@ export default async function POST(
         }
       );
 
+
       response.status(200).json({
         message: "Cart item successfully added to user's cart",
         CartItems: [data],
       });
 
     } else {
-     
-      response.status(404).json({ message: "User's cart not found" });
+      response.status(404).json({ message: "Failed to add item/s to cart" , data});
+    
     }
   } catch (error) {
+    
     console.error("Error adding cart item to user's cart:", error);
     response.status(500).json({
       message: "Error adding cart item to user's cart",
