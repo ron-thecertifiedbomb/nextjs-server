@@ -12,8 +12,7 @@ export default async function POST(
     client = await connectToDatabase();
     const db = client.db("storage");
     const usersCollection = db.collection("users");
-    const cartsCollection = db.collection("carts");
-
+    
     const {
       firstname = "",
       lastname = "",
@@ -23,9 +22,10 @@ export default async function POST(
       password = "",
       gender = "",
       birthday = "",
- 
     } = request.body;
-
+    
+    const cartsCollection = db.collection("cart");
+    
     const existingUser = await usersCollection.findOne({ username });
     const existingEmail = await usersCollection.findOne({ email });
 
@@ -87,13 +87,11 @@ export default async function POST(
     } = user;
 
     const addToCart = {
-
       ownerId: _id,
       firtname: userFirstname,
       lastname: userLastname,
       email: email,
       CartItems: [],
-
     };
 
     await cartsCollection.insertOne(addToCart);
@@ -103,17 +101,12 @@ export default async function POST(
       firstname: userFirstname,
       lastname: userLastname,
       email: userEmail,
-      message: "User profile created successfully",
+      message: "User cart list created successfully",
     });
-
-
   } catch (error) {
-
     console.error("Error creating user profile:", error);
     response.status(500).json({ message: "Internal Server Error" });
-
   } finally {
-
     if (client) {
       await client.close();
     }
