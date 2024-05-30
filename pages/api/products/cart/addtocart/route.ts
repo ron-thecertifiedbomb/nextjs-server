@@ -15,7 +15,7 @@ export default async function POST(
 
     const data  = request.body;
 
-    console.log("Owner ID Data:", data);
+    console.log("Owner ID Data:", data.ownerId);
 
     if (!data) {
       console.error("Owner ID is missing in the request body");
@@ -43,7 +43,7 @@ export default async function POST(
     if (owner) {
       const newItem = {
         cartId: new ObjectId(),
-        ownerId,
+        ownerId: owner,
         productId,
         name,
         price,
@@ -56,7 +56,7 @@ export default async function POST(
       };
 
       await collection.updateOne(
-        { ownerId: ownerId },
+        { ownerId: owner },
         {
           $push: {
             CartItems: newItem,
