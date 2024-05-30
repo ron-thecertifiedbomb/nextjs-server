@@ -29,7 +29,6 @@ export default async function POST(
 
     if (owner) {
       const newItem = {
-        _id: new ObjectId(),
         cartId,
         ownerId,
         productId,
