@@ -13,16 +13,15 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const requestBody = JSON.parse(request.body);
-    console.log("Request Body:", requestBody);
-    console.log("Request Body ownerId :", requestBody.ownerId);
-
-    const { cartId, ownerId, productId, name, price, quantity, totalOrderPrice, quantityOrdered, isSelected, dateAdded, timeAdded } = requestBody;
+    const { ownerId } = request.body;
+    console.log("Owner ID:", ownerId);
 
     if (!ownerId) {
       console.error("Owner ID is missing in the request body");
       return response.status(400).json({ message: "Owner ID is missing in the request body" });
     }
+
+    const { cartId, productId, name, price, quantity, totalOrderPrice, quantityOrdered, isSelected, dateAdded, timeAdded } = request.body;
 
     const collection = db.collection("cart");
 
@@ -30,7 +29,9 @@ export default async function POST(
 
     if (owner) {
       const newItem = {
+        _id: new ObjectId(),
         cartId,
+        ownerId,
         productId,
         name,
         price,
@@ -56,7 +57,7 @@ export default async function POST(
         CartItems: [newItem],
       });
     } else {
-      response.status(404).json({ message: "Owner ID not found. Failed to add item to cart", data: requestBody });
+      response.status(404).json({ message: "Owner ID not found. Failed to add item to cart", data: request.body });
     }
   } catch (error) {
     console.error("Error adding cart item to user's cart:", error);
