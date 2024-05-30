@@ -16,31 +16,48 @@ export default async function POST(
     const requestBody = JSON.parse(request.body);
     console.log("Request Body:", requestBody);
 
-    const { data } = requestBody;
+    const { cartId, ownerId, productId, name, price, quantity, totalOrderPrice, quantityOrdered, isSelected, dateAdded, timeAdded } = requestBody;
 
-    const ownerId = data.ownerId;
-    console.log("Owner ID:", ownerId);
+    if (!ownerId) {
+      console.error("Owner ID is missing in the request body");
+      return response.status(400).json({ message: "Owner ID is missing in the request body" });
+    }
 
     const collection = db.collection("cart");
 
     const owner = await collection.findOne({ ownerId: ownerId });
 
     if (owner) {
+      const newItem = {
+        _id: new ObjectId(),
+        cartId,
+        ownerId,
+        productId,
+        name,
+        price,
+        quantity,
+        totalOrderPrice,
+        quantityOrdered,
+        isSelected,
+        dateAdded,
+        timeAdded
+      };
+
       await collection.updateOne(
         { ownerId: ownerId },
         {
           $push: {
-            CartItems: data,
+            CartItems: newItem,
           }
         }
       );
 
       response.status(200).json({
         message: "Cart item successfully added to user's cart",
-        CartItems: [data],
+        CartItems: [newItem],
       });
     } else {
-      response.status(404).json({ message: "Owner ID not found. Failed to add item to cart", data });
+      response.status(404).json({ message: "Owner ID not found. Failed to add item to cart", data: requestBody });
     }
   } catch (error) {
     console.error("Error adding cart item to user's cart:", error);
