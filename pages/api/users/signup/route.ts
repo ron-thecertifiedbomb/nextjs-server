@@ -1,22 +1,29 @@
+import bcrypt from "bcrypt";
+import { NextApiRequest, NextApiResponse } from "next";
+import connectToDatabase from "../../../../dbConfig/dbConfig";
 
-import bcrypt from 'bcrypt';
-import { NextApiRequest, NextApiResponse } from 'next';
-import connectToDatabase from '../../../../dbConfig/dbConfig';
-
-
-export default async function POST(request: NextApiRequest, response: NextApiResponse) {
+export default async function POST(
+  request: NextApiRequest,
+  response: NextApiResponse
+) {
   let client;
 
   try {
-
     client = await connectToDatabase();
-    const db = client.db('storage');
-    const collection = db.collection('users');
+    const db = client.db("storage");
+    const collection = db.collection("users");
 
     const {
-      username = '',
-      password = '',
-      email = ''
+      firstname = "",
+      lastname = "",
+      username = "",
+      mobile = "",
+      email = "",
+      password = "",
+      gender = "",
+      dateofbirth = "",
+      dateCreated = "",
+      timeCreated = "",
     } = request.body;
 
     const existingUser = await collection.findOne({ username });
@@ -32,30 +39,33 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
       return response.status(409).json({ error: "Email already exists" });
     }
 
-
     if (!password) {
       console.error("Password is required");
       return response.status(400).json({ error: "Password is required" });
     }
 
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
-
     await collection.insertOne({
+      firstname,
+      lastname,
       username,
-      password: hashedPassword,
+      mobile,
       email,
+      password: hashedPassword,
+      gender,
+      dateofbirth,
+      dateCreated,
+      timeCreated,
     });
+   
 
-    // Return success response
-    response.status(201).json({ message: 'User profile created successfully' });
+    
+    response.status(201).json({ message: "User profile created successfully" });
   } catch (error) {
-
-    console.error('Error creating user profile:', error);
-    response.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error creating user profile:", error);
+    response.status(500).json({ message: "Internal Server Error" });
   } finally {
-
     if (client) {
       await client.close();
     }
