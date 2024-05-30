@@ -19,11 +19,17 @@ export default async function POST(
 
     const collection = db.collection("cart");
 
-    const userCart = await collection.findOne({ ownerId: data.ownerId });
+    const ownerId = await collection.findOne({ ownerId: data.ownerId });
 
-    if (userCart) {
+    response.status(200).json({
+      message: "ownerId" , ownerId,
+  
+    });
+
+
+    if (ownerId) {
       await collection.updateOne(
-        { ownerId:  data.ownerId   },
+        { ownerId:  ownerId   },
         {
           $push: {
             CartItems: [
