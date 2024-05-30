@@ -12,7 +12,7 @@ export default async function POST(
     client = await connectToDatabase();
     const db = client.db("storage");
     const usersCollection = db.collection("users");
-    
+
     const {
       firstname = "",
       lastname = "",
@@ -23,9 +23,10 @@ export default async function POST(
       gender = "",
       birthday = "",
     } = request.body;
-    
+
     const cartsCollection = db.collection("cart");
-    
+    const addressCollection = db.collection("address");
+
     const existingUser = await usersCollection.findOne({ username });
     const existingEmail = await usersCollection.findOne({ email });
 
@@ -86,7 +87,15 @@ export default async function POST(
       email: userEmail,
     } = user;
 
-    const addToCart = {
+    const CartListSchema = {
+      ownerId: _id,
+      firtname: userFirstname,
+      lastname: userLastname,
+      email: email,
+      CartItems: [],
+    };
+    
+    const AddressListSchema = {
       ownerId: _id,
       firtname: userFirstname,
       lastname: userLastname,
@@ -94,7 +103,9 @@ export default async function POST(
       CartItems: [],
     };
 
-    await cartsCollection.insertOne(addToCart);
+    await cartsCollection.insertOne(CartListSchema);
+    await addressCollection.insertOne(AddressListSchema);
+
 
     response.status(201).json({
       ownerId: _id,
