@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../../dbConfig/dbConfig";
-import { ObjectId } from "mongodb";
+
 
 export default async function POST(
   request: NextApiRequest,
@@ -12,65 +12,31 @@ export default async function POST(
     client = await connectToDatabase();
     const db = client.db("storage");
 
-    // Destructuring the request body
     const {
-      userId = "",
-      CartItems: [
-        {
-          cartId = '',
-          name = "",
-          price = "",
-          quantity = "",
-          totalOrderPrice = "",
-          quantityOrdered = "",
-          isSelected = "",
-          dateAdded = "",
-          timeAdded = "",
-        },
-      ],
+      CartItems: [data],
     } = JSON.parse(request.body);
 
     const collection = db.collection("cart");
 
-    const userCart = await collection.findOne({ userId: userId });
+    const userCart = await collection.findOne({ ownerId: data._id });
 
     if (userCart) {
       await collection.updateOne(
-        { userId: userId },
+        { ownerId: data._id  },
         {
           $push: {
-            CartItems: 
-              {
-                cartId,
-                name,
-                price,
-                quantity,
-                totalOrderPrice,
-                quantityOrdered,
-                isSelected,
-                dateAdded,
-                timeAdded,
-              },
-            
+            CartItems: [data],
           },
         }
       );
 
       response.status(200).json({
         message: "Cart item successfully added to user's cart",
-        CartItems: {
-          name,
-          price,
-          quantity,
-          totalOrderPrice,
-          quantityOrdered,
-          isSelected,
-          dateAdded,
-          timeAdded,
-        },
+        CartItems: [data],
       });
+
     } else {
-      // User's cart does not exist, return an error
+     
       response.status(404).json({ message: "User's cart not found" });
     }
   } catch (error) {

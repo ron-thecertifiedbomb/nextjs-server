@@ -109,7 +109,6 @@ export default async function POST(
 
 
     response.status(201).json({
-
       _id: _id,
       firstname: userFirstname,
       lastname: userLastname,
@@ -117,6 +116,9 @@ export default async function POST(
       message: "User cart list created successfully",
 
     });
+
+
+    
   } catch (error) {
     console.error("Error creating user profile:", error);
     response.status(500).json({ message: "Internal Server Error" });

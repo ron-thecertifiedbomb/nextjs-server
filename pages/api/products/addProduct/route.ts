@@ -11,7 +11,6 @@ export default async function POST(request: NextApiRequest, response: NextApiRes
     const collection = db.collection('products');
     await Promise.all(productData.map(product => collection.insertOne(product)));
 
-
     response.status(201).json({ message: 'Products inserted successfully' });
   } catch (error) {
     console.error('Error inserting products:', error);
