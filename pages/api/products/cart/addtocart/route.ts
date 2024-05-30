@@ -15,7 +15,7 @@ export default async function POST(
 
     const  { data } = JSON.parse(request.body);
 
-    console.log("Owner ID Data:", data.ownerId);
+    console.log("Owner ID Data:", data.cartListConveted.ownerId);
 
     if (!data) {
       console.error("Owner ID is missing in the request body");
