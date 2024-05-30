@@ -22,9 +22,8 @@ export default async function POST(
       email = "",
       password = "",
       gender = "",
-      dateofbirth = "",
-      dateCreated = "",
-      timeCreated = "",
+      birthday = "",
+ 
     } = request.body;
 
     const existingUser = await usersCollection.findOne({ username });
@@ -52,6 +51,7 @@ export default async function POST(
     });
     const [date, time] = philippinesTime.split(", ");
 
+  
     const dateCreatedServer = new Date(date).toISOString();
     const timeCreatedServer = time;
 
@@ -63,7 +63,7 @@ export default async function POST(
       email,
       password: hashedPassword,
       gender,
-      dateofbirth,
+      birthday,
       dateCreated: dateCreatedServer,
       timeCreated: timeCreatedServer,
     };
@@ -87,15 +87,17 @@ export default async function POST(
       email: userEmail,
     } = user;
 
-    const newCart = {
+    const addToCart = {
+
       ownerId: _id,
       firtname: userFirstname,
-      lastname,
-      userLastname,
+      lastname: userLastname,
+      email: email,
       CartItems: [],
+
     };
 
-    await cartsCollection.insertOne(newCart);
+    await cartsCollection.insertOne(addToCart);
 
     response.status(201).json({
       ownerId: _id,
