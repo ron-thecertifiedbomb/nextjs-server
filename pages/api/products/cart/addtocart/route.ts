@@ -13,11 +13,11 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const ownerId  = request.body.ownerId;
+    const data  = request.body;
 
-    console.log("Owner ID:", ownerId);
+    console.log("Owner ID Data:", data);
 
-    if (!ownerId) {
+    if (!data) {
       console.error("Owner ID is missing in the request body");
       return response
         .status(400)
