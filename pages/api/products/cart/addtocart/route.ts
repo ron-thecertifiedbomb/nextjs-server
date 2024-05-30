@@ -13,9 +13,9 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const  data = JSON.parse(request.body);
+    const  { data } = JSON.parse(request.body);
 
-    console.log("Owner ID Data:", data);
+    console.log("Owner ID Data:", data.ownerId);
 
     if (!data) {
       console.error("Owner ID is missing in the request body");
@@ -45,15 +45,15 @@ export default async function POST(
       const newItem = {
         cartId: new ObjectId(),
         ownerId: owner,
-        productId,
-        name,
-        price,
-        quantity,
-        totalOrderPrice,
-        quantityOrdered,
-        isSelected,
-        dateAdded,
-        timeAdded,
+        // productId,
+        // name,
+        // price,
+        // quantity,
+        // totalOrderPrice,
+        // quantityOrdered,
+        // isSelected,
+        // dateAdded,
+        // timeAdded,
       };
 
       await collection.updateOne(
