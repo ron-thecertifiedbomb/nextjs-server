@@ -13,7 +13,7 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const  data  = request.body;
+    const  data = JSON.parse(request.body);
 
     console.log("Owner ID Data:", data);
 
@@ -24,22 +24,22 @@ export default async function POST(
         .json({ message: "Owner ID is missing in the request body" });
     }
 
-    const {
-      ownerId,
-      productId,
-      name,
-      price,
-      quantity,
-      totalOrderPrice,
-      quantityOrdered,
-      isSelected,
-      dateAdded,
-      timeAdded,
-    } = request.body;
+    // const {
+    //   ownerId,
+    //   productId,
+    //   name,
+    //   price,
+    //   quantity,
+    //   totalOrderPrice,
+    //   quantityOrdered,
+    //   isSelected,
+    //   dateAdded,
+    //   timeAdded,
+    // } = request.body;
 
     const collection = db.collection("cart");
 
-    const owner = await collection.findOne({ ownerId: new ObjectId(productId) });
+    const owner = await collection.findOne({ ownerId: new ObjectId(data.ownerId) });
 
     if (owner) {
       const newItem = {
