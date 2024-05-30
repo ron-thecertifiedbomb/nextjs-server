@@ -88,19 +88,20 @@ export default async function POST(
     } = user;
 
     const CartListSchema = {
+
       ownerId: _id,
       firtname: userFirstname,
       lastname: userLastname,
       email: email,
       CartItems: [],
     };
-    
+
     const AddressListSchema = {
       ownerId: _id,
       firtname: userFirstname,
       lastname: userLastname,
       email: email,
-      CartItems: [],
+      AddressList: [],
     };
 
     await cartsCollection.insertOne(CartListSchema);
@@ -108,11 +109,13 @@ export default async function POST(
 
 
     response.status(201).json({
-      ownerId: _id,
+
+      _id: _id,
       firstname: userFirstname,
       lastname: userLastname,
       email: userEmail,
       message: "User cart list created successfully",
+
     });
   } catch (error) {
     console.error("Error creating user profile:", error);
