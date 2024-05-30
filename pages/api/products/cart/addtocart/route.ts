@@ -13,17 +13,6 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const   data  = JSON.parse(request.body);
-
-    console.log("Owner ID Data:", data);
-
-    if (!data) {
-      console.error("Owner ID is missing in the request body");
-      return response
-        .status(400)
-        .json({ message: "Owner ID is missing in the request body" });
-    }
-
     const {
       ownerId,
       productId,
@@ -36,6 +25,16 @@ export default async function POST(
       dateAdded,
       timeAdded,
     } = request.body;
+  
+
+
+    if (!request.body) {
+      console.error("Owner ID is missing in the request body");
+      return response
+        .status(400)
+        .json({ message: "Owner ID is missing in the request body" });
+    }
+
 
     const collection = db.collection("cart");
 
@@ -44,7 +43,6 @@ export default async function POST(
     if (ownerId) {
       const newItem = {
         cartId: new ObjectId(),
-        ownerId: ownerID,
         productId,
         name,
         price,
@@ -56,8 +54,8 @@ export default async function POST(
         timeAdded,
       };
 
-      await collection.updateOne(
-        { ownerId: owner },
+      await collection.findOneAndUpdate(
+        { ownerId: new ObjectId(ownerID) },
         {
           $push: {
             CartItems: newItem,
