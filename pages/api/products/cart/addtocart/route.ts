@@ -21,7 +21,7 @@ export default async function POST(
       return response.status(400).json({ message: "Owner ID is missing in the request body" });
     }
 
-    const { cartId, productId, name, price, quantity, totalOrderPrice, quantityOrdered, isSelected, dateAdded, timeAdded } = request.body;
+    const {productId, name, price, quantity, totalOrderPrice, quantityOrdered, isSelected, dateAdded, timeAdded } = request.body;
 
     const collection = db.collection("cart");
 
@@ -29,8 +29,7 @@ export default async function POST(
 
     if (owner) {
       const newItem = {
-        _id: new ObjectId(),
-        cartId,
+        cartId: new ObjectId(),
         ownerId,
         productId,
         name,
