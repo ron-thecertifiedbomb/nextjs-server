@@ -15,7 +15,7 @@ export default async function POST(
 
     const ownerId = request.body;
 
-    console.log("Owner ID:", ownerId);
+    console.log("Owner ID:", ownerId.ownerId);
 
     if (!ownerId) {
       console.error("Owner ID is missing in the request body");
