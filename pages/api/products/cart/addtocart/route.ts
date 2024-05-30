@@ -13,7 +13,7 @@ export default async function POST(
     const db = client.db("storage");
 
     const {
-      CartItems: [data],
+       data,
     } = JSON.parse(request.body);
 
 
