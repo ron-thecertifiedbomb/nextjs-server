@@ -12,8 +12,6 @@ export default async function handler(
 
     client = await connectToDatabase();
     const db = client.db('storage');
-
-
     const body = JSON.parse(request.body);
     console.log("Request body: ", body);
 
@@ -21,7 +19,6 @@ export default async function handler(
 
 
     const cartItems = {
-      ownerId,
       productId,
       name,
       price,
