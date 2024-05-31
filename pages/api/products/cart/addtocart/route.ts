@@ -13,7 +13,7 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const { ownerId, cartItems } = JSON.parse(request.body);
+    const { ownerId , cartItems } = JSON.parse(request.body);
 
     console.log("Owner ID Data:", ownerId);
     console.log("Cart Data", cartItems);
