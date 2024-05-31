@@ -21,7 +21,8 @@ export default async function handler(
     
     console.log("Full request body: ", body);
 
-    const { ownerId, cartItems } = body;
+    const payload = body[1]; // Adjusting to access the payload correctly
+    const { ownerId, cartItems } = payload;
 
     if (!ownerId || !cartItems) {
       console.error("Owner ID or Cart Items are missing in the request body");
@@ -37,7 +38,7 @@ export default async function handler(
       { ownerId: new ObjectId(ownerId) },
       {
         $push: {
-          cartItems: cartItems,
+          cartItems: cartItems, // Make sure this is in the correct format expected by the DB
         },
       },
       {
