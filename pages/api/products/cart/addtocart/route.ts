@@ -17,7 +17,20 @@ export default async function handler(
     const body = JSON.parse(request.body);
     console.log("Request body: ", body);
 
-    const { ownerId, cartItems } = body;
+    const { ownerId, productId, name, price, quantity, totalOrderPrice, quantityOrdered,dateAdded, timeAdded } = body;
+
+
+    const cartItems = {
+      ownerId,
+      productId,
+      name,
+      price,
+      quantity,
+      totalOrderPrice,
+      quantityOrdered,
+      dateAdded,
+      timeAdded
+    }
 
 
     if (!ownerId || !cartItems) {
