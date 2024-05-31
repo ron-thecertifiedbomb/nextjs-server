@@ -6,39 +6,36 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
-  if (request.method !== 'POST') {
-    return response.status(405).json({ message: 'Method not allowed' });
-  }
-
   let client;
 
   try {
-    client = await connectToDatabase();
 
-    const db = client.db("storage");
+    client = await connectToDatabase();
+    const db = client.db('storage');
+
 
     const body = JSON.parse(request.body);
-    
-    console.log("Full request body: ", body);
+    console.log("Request body: ", body);
 
-    const payload = body[1]; // Adjusting to access the payload correctly
-    const { ownerId, cartItems } = payload;
+    const { ownerId, cartItems } = body;
+
 
     if (!ownerId || !cartItems) {
       console.error("Owner ID or Cart Items are missing in the request body");
       return response.status(400).json({ message: "Owner ID or Cart Items are missing in the request body" });
     }
 
+
     console.log("Owner ID: ", ownerId);
     console.log("Cart Items: ", cartItems);
 
-    const collection = db.collection("cart");
-
+ 
+    const collection = db.collection('cart');
     const result = await collection.findOneAndUpdate(
       { ownerId: new ObjectId(ownerId) },
       {
         $push: {
-          cartItems: cartItems, // Make sure this is in the correct format expected by the DB
+          cartItems: cartItems, 
         },
       },
       {
@@ -47,26 +44,35 @@ export default async function handler(
       }
     );
 
-    if (result && result.value) {
-      const updatedCartItems = result.value.cartItems;
+    if (result) {
+  
       response.status(200).json({
-        message: "Cart item successfully added to user's cart",
-        cartItems: updatedCartItems,
+        message: "Cart items successfully added to user's cart",
+  
       });
+      
     } else {
       response.status(404).json({
-        message: "Owner ID not found. Failed to add item to cart",
+        message: "Owner ID not found. Failed to add items to cart",
       });
     }
   } catch (error) {
-    console.error("Error adding cart item to user's cart:", error);
+    
+    console.error("Error adding cart items to user's cart:", error);
     response.status(500).json({
-      message: "Error adding cart item to user's cart",
+      message: "Error adding cart items to user's cart",
       error: error.message,
     });
   } finally {
+    // Ensure the database connection is closed
     if (client) {
       await client.close();
     }
   }
 }
+
+
+
+
+
+

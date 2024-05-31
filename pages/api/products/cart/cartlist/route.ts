@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from "../../../../../dbConfig/dbConfig";
 
 
-
-
 export default async function POST(request: NextApiRequest, response: NextApiResponse) {
   let client;
 
