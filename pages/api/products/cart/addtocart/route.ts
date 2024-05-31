@@ -2,10 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../../dbConfig/dbConfig";
 import { ObjectId } from "mongodb";
 
-export default async function POST(
+export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
+  if (request.method !== 'POST') {
+    return response.status(405).json({ message: 'Method not allowed' });
+  }
+
   let client;
 
   try {
@@ -13,27 +17,27 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const { payload } = JSON.parse(request.body);
+    const body = JSON.parse(request.body);
+    
+    console.log("Full request body: ", body);
 
-    console.log("Pay Load from front end ", payload.ownerId);
-    console.log("Cart Data", payload.cartItems);
+    const { ownerId, cartItems } = body;
 
-    if (!payload || !payload.ownerId) {
-      console.error("Owner ID is missing in the request body");
-      return response
-        .status(400)
-        .json({ message: "Owner ID is missing in the request body" });
+    if (!ownerId || !cartItems) {
+      console.error("Owner ID or Cart Items are missing in the request body");
+      return response.status(400).json({ message: "Owner ID or Cart Items are missing in the request body" });
     }
+
+    console.log("Owner ID: ", ownerId);
+    console.log("Cart Items: ", cartItems);
 
     const collection = db.collection("cart");
 
-    const { ownerId, cartItems } = payload;
-
     const result = await collection.findOneAndUpdate(
-      { ownerId: ownerId },
+      { ownerId: new ObjectId(ownerId) },
       {
         $push: {
-          cartItems: { $each: cartItems },
+          cartItems: cartItems,
         },
       },
       {
@@ -45,18 +49,18 @@ export default async function POST(
     if (result && result.value) {
       const updatedCartItems = result.value.cartItems;
       response.status(200).json({
-        message: "Cart items successfully added to user's cart",
+        message: "Cart item successfully added to user's cart",
         cartItems: updatedCartItems,
       });
     } else {
       response.status(404).json({
-        message: "Owner ID not found. Failed to add items to cart",
+        message: "Owner ID not found. Failed to add item to cart",
       });
     }
   } catch (error) {
-    console.error("Error adding cart items to user's cart:", error);
+    console.error("Error adding cart item to user's cart:", error);
     response.status(500).json({
-      message: "Error adding cart items to user's cart",
+      message: "Error adding cart item to user's cart",
       error: error.message,
     });
   } finally {
