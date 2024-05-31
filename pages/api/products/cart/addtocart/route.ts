@@ -13,12 +13,12 @@ export default async function POST(
 
     const db = client.db("storage");
 
-    const { ownerId , cartItems } = JSON.parse(request.body);
+    const { payload } = JSON.parse(request.body);
 
-    console.log("Owner ID Data:", ownerId);
-    console.log("Cart Data", cartItems);
+    console.log("Pay Load from front end ", payload.ownerId);
+    console.log("Cart Data", payload.cartItems);
 
-    if (!ownerId) {
+    if (!payload || !payload.ownerId) {
       console.error("Owner ID is missing in the request body");
       return response
         .status(400)
@@ -27,36 +27,36 @@ export default async function POST(
 
     const collection = db.collection("cart");
 
-    const ownerID = await collection.findOne({ ownerId: new ObjectId(ownerId) });
+    const { ownerId, cartItems } = payload;
 
-    if (ownerID) {
-      const newItem = {
-        cartItems,
-      };
+    const result = await collection.findOneAndUpdate(
+      { ownerId: ownerId },
+      {
+        $push: {
+          cartItems: { $each: cartItems },
+        },
+      },
+      {
+        returnDocument: "after",
+        upsert: true,
+      }
+    );
 
-      await collection.updateOne(
-        { ownerId: ownerID },
-        {
-          $push: {
-            CartItems: newItem,
-          },
-        }
-      );
-
+    if (result && result.value) {
+      const updatedCartItems = result.value.cartItems;
       response.status(200).json({
-        message: "Cart item successfully added to user's cart",
-        CartItems: [newItem],
+        message: "Cart items successfully added to user's cart",
+        cartItems: updatedCartItems,
       });
     } else {
       response.status(404).json({
-        message: "Owner ID not found. Failed to add item to cart",
-        data: request.body,
+        message: "Owner ID not found. Failed to add items to cart",
       });
     }
   } catch (error) {
-    console.error("Error adding cart item to user's cart:", error);
+    console.error("Error adding cart items to user's cart:", error);
     response.status(500).json({
-      message: "Error adding cart item to user's cart",
+      message: "Error adding cart items to user's cart",
       error: error.message,
     });
   } finally {
