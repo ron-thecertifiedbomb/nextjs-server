@@ -55,6 +55,7 @@ export default async function handler(
         {
           $inc: {
             "cartItems.$.quantityOrdered": quantityOrdered,
+            "cartItems.$.price": price,
           },
           $set: {
             "cartItems.$.price": price, // Update price in case it changed
