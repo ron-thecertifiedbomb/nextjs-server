@@ -15,10 +15,11 @@ export default async function handler(
     const body = JSON.parse(request.body);
     console.log("Request body: ", body);
 
-    const { ownerId, productId, name, price, quantity, totalOrderPrice, quantityOrdered,dateAdded, timeAdded } = body;
+    const { ownerId, orderId, productId, name, price, quantity, totalOrderPrice, quantityOrdered,dateAdded, timeAdded } = body;
 
 
     const cartItems = {
+      orderId,
       productId,
       name,
       price,
@@ -36,13 +37,9 @@ export default async function handler(
     }
 
 
-    console.log("Owner ID: ", ownerId);
-    console.log("Cart Items: ", cartItems);
-
- 
     const collection = db.collection('cart');
     const result = await collection.findOneAndUpdate(
-      { ownerId: new ObjectId(ownerId) },
+      {  ownerId: new ObjectId(ownerId) },
       {
         $push: {
           cartItems: cartItems, 
@@ -55,10 +52,8 @@ export default async function handler(
     );
 
     if (result) {
-  
       response.status(200).json({
         message: "Cart items successfully added to user's cart",
-  
       });
       
     } else {
@@ -74,7 +69,7 @@ export default async function handler(
       error: error.message,
     });
   } finally {
-    // Ensure the database connection is closed
+
     if (client) {
       await client.close();
     }
