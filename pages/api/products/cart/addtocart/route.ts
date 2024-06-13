@@ -15,7 +15,9 @@ export default async function handler(
     const body = JSON.parse(request.body);
     console.log("Request body: ", body);
 
-    const { ownerId, orderId, productId, name, price, quantity, totalOrderPrice, quantityOrdered,dateAdded, timeAdded } = body;
+    const { ownerId, orderId, productId, name, price, quantity, quantityOrdered, dateAdded, timeAdded } = body;
+
+    const itemStocks = quantity
 
 
     const cartItems = {
@@ -23,8 +25,6 @@ export default async function handler(
       productId,
       name,
       price,
-      quantity,
-      totalOrderPrice,
       quantityOrdered,
       dateAdded,
       timeAdded
