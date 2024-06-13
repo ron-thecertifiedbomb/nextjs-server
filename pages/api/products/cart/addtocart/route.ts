@@ -49,7 +49,7 @@ export default async function handler(
         orderId,
         productId,
         name,
-        price: price * quantityOrdered, // Set initial total price
+        price: price * quantityOrdered, 
         quantityOrdered,
         dateAdded,
         timeAdded
