@@ -24,18 +24,20 @@ export default async function handler(
     const collection = db.collection('cart');
 
     // Check if the product already exists in the cart
-    const existingCartItem = await collection.findOne({ ownerId: new ObjectId(ownerId), "cartItems.productId": productId });
+    const existingCart = await collection.findOne({ ownerId: new ObjectId(ownerId) });
+    const existingCartItem = existingCart?.cartItems.find(item => item.productId === productId);
 
     if (existingCartItem) {
       // If the product exists, update its quantity and price
+      const newQuantity = existingCartItem.quantityOrdered + quantityOrdered;
+      const newTotalPrice = price * newQuantity;
+
       await collection.updateOne(
         { ownerId: new ObjectId(ownerId), "cartItems.productId": productId },
         {
-          $inc: {
-            "cartItems.$.quantityOrdered": quantityOrdered,
-          },
           $set: {
-            "cartItems.$.price": price, // Update price
+            "cartItems.$.quantityOrdered": newQuantity,
+            "cartItems.$.price": newTotalPrice, // Update total price
             "cartItems.$.dateAdded": dateAdded, // Update date added
             "cartItems.$.timeAdded": timeAdded, // Update time added
           }
@@ -47,7 +49,7 @@ export default async function handler(
         orderId,
         productId,
         name,
-        price,
+        price: price * quantityOrdered, // Set initial total price
         quantityOrdered,
         dateAdded,
         timeAdded
