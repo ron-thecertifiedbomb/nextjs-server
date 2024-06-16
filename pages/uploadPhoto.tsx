@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import UploadPhotoForm from "../components/UploadPhoto";
 
 const UploadPhotoPage = () => {
+  
   const productId = "6650011ab3f82d2c9af555f5";
 
   const url = `/api/products/updateProduct/route?_id=${productId}`;
