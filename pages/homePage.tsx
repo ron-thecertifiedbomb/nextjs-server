@@ -1,6 +1,6 @@
 "use client";
-import { useRef } from "react";
-import { useAppSelector, useAppDispatch, useAppStore } from "../lib/hooks";
+
+import { useAppSelector } from "../lib/hooks";
 
 import Head from "next/head";
 
