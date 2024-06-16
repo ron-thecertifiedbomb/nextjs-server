@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
+import MultiplePhotoUploader from "../components/MultiplePhotoUploader";
 
-import UploadPhotoForm from "../components/UploadPhoto";
 
 const UploadPhotoPage = () => {
   
@@ -8,11 +8,12 @@ const UploadPhotoPage = () => {
 
   const url = `/api/products/updateProduct/route?_id=${productId}`;
 
-  const handleSubmit = useCallback(async (userData) => {
-    console.log("data from the component", JSON.stringify(userData));
+  const handleSubmit = useCallback(async (images) => {
+
+    console.log("data from the component", JSON.stringify(images));
 
     try {
-      const updatedData = JSON.stringify(userData);
+      const updatedData = JSON.stringify(images);
 
       const response = await fetch(url, {
         method: "POST",
@@ -55,8 +56,8 @@ const UploadPhotoPage = () => {
           alignItems: "center",
         }}
       >
-        <h1>Upload Image</h1>
-        <UploadPhotoForm onSubmit={handleSubmit} />
+        <h2>Product Image Uploader</h2>
+        <MultiplePhotoUploader  />
       </div>
     </div>
   );
