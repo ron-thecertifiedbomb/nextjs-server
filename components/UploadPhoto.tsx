@@ -7,34 +7,21 @@ import {
   UploadTask,
 } from "firebase/storage";
 import {
-  TextField,
   Button,
-  Switch,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 
-interface User {
-  // _id: string;
-  // description: string;
-  // roasted: string;
-  // ingredients: string;
-  // special_ingredient: string;
-  // average_rating: number;
-  // ratings_count: string;
-  // favourite: boolean;
-  // type: string;
+interface Images {
+
   imagelink_square: string | null;
   imagelink_portrait: string | null;
 }
 
-interface AddFormProps {
-  onSubmit: (user: User) => void;
+interface UploadImagesProps {
+  onSubmit: (image: Images) => void;
 }
 
-const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
+const UploadPhotoForm: React.FC<UploadImagesProps> = ({ onSubmit }) => {
+
   const [imgUrl1, setImgUrl1] = useState<string | null>(null);
   const [imgUrl2, setImgUrl2] = useState<string | null>(null);
   const [progresspercent1, setProgresspercent1] = useState<number>(0);
@@ -43,6 +30,7 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
   const [isUploading2, setIsUploading2] = useState<boolean>(false);
 
   const handleFileChange1 = (event: ChangeEvent<HTMLInputElement>) => {
+    
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -109,7 +97,7 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
       });
       resetForm();
     } else {
-      alert("Please wait for both images to finish uploading.");
+      alert("Please wait for images to finish uploading.");
     }
   };
 
@@ -133,6 +121,7 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
         className="form"
         style={{ display: "flex", flexDirection: "column", gap: 10 }}
       >
+
         <input type="file" onChange={handleFileChange1} />
         {isUploading1 && progresspercent1 > 0 && (
           <div className="outerbar">
@@ -142,6 +131,8 @@ const UploadPhotoForm: React.FC<AddFormProps> = ({ onSubmit }) => {
           </div>
         )}
         {imgUrl1 && <img src={imgUrl1} alt="uploaded file 1" height={200} />}
+
+
         <input type="file" onChange={handleFileChange2} />
         {isUploading2 && progresspercent2 > 0 && (
           <div className="outerbar">
