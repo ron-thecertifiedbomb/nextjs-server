@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./features/counter/counterSlice";
+import imageReducer from './features/images/productImagesSlice'
+
+
 
 export const store = () => {
   return configureStore({
     reducer: {
       counter: counterReducer,
+      images: imageReducer
     },
   });
 };

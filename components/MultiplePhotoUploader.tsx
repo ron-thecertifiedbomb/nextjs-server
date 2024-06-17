@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { Button } from "@mui/material";
 import PhotoUploader from "./PhotoUploader";
 
-interface MultiplePhotoUploaderProp {
-  productId: string | null;
-}
 
-const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProp> = ({productId}) => {
+
+const MultiplePhotoUploader: React.FC = () => {
 
   const [total, setTotal] = useState<number>(1); 
   const [uploaders, setUploaders] = useState<number[]>([0]);
@@ -22,7 +20,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProp> = ({productId})
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {uploaders.map((uploader, index) => (
         <div key={index} style={{ display: "flex", gap: 10 }}>
-          <PhotoUploader key={uploader} productId={productId} />
+          <PhotoUploader key={uploader}  />
           {index > 0 && ( 
             <Button
               variant="contained"

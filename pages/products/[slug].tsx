@@ -1,12 +1,18 @@
+'use client'
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
+import { useAppSelector } from "../../lib/hooks";
 
 export default function ProductPage(props) {
+
+  const images = useAppSelector((state) => state.images)
+
+  console.log('Images from Redux', images)
 
   return (
     <div>
       <h1>Product: {props.product.name}</h1>
       <div style={{width: 200, height: 400}}>
-      <MultiplePhotoUploader productId={props.product._id}/>
+      <MultiplePhotoUploader/>
         </div>
     </div>
   );

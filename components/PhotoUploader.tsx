@@ -6,14 +6,19 @@ import {
   uploadBytesResumable,
   UploadTask,
 } from "firebase/storage";
+import { useAppDispatch } from "../lib/hooks";
+import { uploadImages } from "../lib/features/images/productImagesSlice";
 
 
 interface PhotoUploaderProps {
   key?: string | number;
-  productId: string | null;
+
 }
 
-const PhotoUploader: React.FC<PhotoUploaderProps> = ({productId}) => {
+const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
+
+
+  const dispatch = useAppDispatch()
 
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progresspercent, setProgresspercent] = useState<number>(0);
@@ -42,12 +47,12 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({productId}) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImgUrl(downloadURL);
+          dispatch(uploadImages([downloadURL]));
           setIsUploading(false);
         });
       }
     );
   };
-
 
   return (
     <div>
