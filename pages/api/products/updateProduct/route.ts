@@ -6,6 +6,19 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ) {
+  // Allow requests from any origin
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  // Allow specific methods
+  response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  // Allow specific headers
+  response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (request.method === "OPTIONS") {
+    // Preflight request response
+    response.status(200).end();
+    return;
+  }
+
   let client;
 
   try {
