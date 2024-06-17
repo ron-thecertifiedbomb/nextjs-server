@@ -11,7 +11,8 @@ export const uploadImageAndUpdateProduct = createAsyncThunk(
     const url = `https://nextjs-server-rho.vercel.app/api/products/updateProduct/route?_id=${productId}`;
 
     try {
-      const updatedData = JSON.stringify({ images });
+      const imageUrls = JSON.stringify({ images });
+      const updatedData = JSON.stringify({ imageUrls });
 
       const response = await fetch(url, {
         method: "POST",
