@@ -4,9 +4,9 @@ import { useAppSelector } from "../../lib/hooks";
 
 export default function ProductPage(props) {
 
-  const images = useAppSelector((state) => state.images)
+  const images = useAppSelector((state) => state.images.images.length)
 
-  console.log('Images from Redux', images)
+  console.log('Images', images)
 
   return (
     <div>
