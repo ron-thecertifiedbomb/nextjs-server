@@ -13,8 +13,6 @@ export default async function GET(request: NextApiRequest, response: NextApiResp
 
     const product = await collection.findOne({  _id: new ObjectId(productId) });
 
-  
-
     if (!product) {
       response.status(404).json({ message: 'Product not found' });
       return;
