@@ -8,7 +8,7 @@ export const store = () => {
   return configureStore({
     reducer: {
       counter: counterReducer,
-      images: imageReducer
+      storage: imageReducer
     },
   });
 };

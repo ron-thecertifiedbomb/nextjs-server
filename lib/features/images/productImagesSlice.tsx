@@ -9,7 +9,7 @@ const initialState: ImagesState = {
 };
 
 const imagesSlice = createSlice({
-  name: 'images',
+  name: 'storage',
   initialState,
   reducers: {
     productImages(state, action: PayloadAction<string[]>) {

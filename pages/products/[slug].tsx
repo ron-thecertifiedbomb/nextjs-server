@@ -4,9 +4,9 @@ import { useAppSelector } from "../../lib/hooks";
 
 export default function ProductPage(props) {
 
-  const images = useAppSelector((state) => state.images.images.length)
+  const images = useAppSelector((state) => state.storage.images.length)
 
-  console.log('Images', images)
+  console.log('Image Storage Quantity', images)
 
   return (
     <div>
