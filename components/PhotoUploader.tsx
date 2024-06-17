@@ -8,7 +8,7 @@ import {
 } from "firebase/storage";
 import { useAppDispatch } from "../lib/hooks";
 import { uploadImages } from "../lib/features/images/productImagesSlice";
-
+import Image from "next/image";
 
 interface PhotoUploaderProps {
   key?: string | number;
@@ -64,7 +64,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
           </div>
         </div>
       )}
-      {imgUrl && <img src={imgUrl} alt="image_link" height={200} />}
+      {imgUrl && <Image src={imgUrl} alt="image_link" height={200} />}
     </div>
   );
 };

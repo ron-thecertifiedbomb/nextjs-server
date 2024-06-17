@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface User {
   id: number;
@@ -6,7 +7,7 @@ interface User {
   description: string;
   image: string;
   phone: string;
-  // Add more properties if necessary
+
 }
 
 interface CardProps {
@@ -18,7 +19,7 @@ const Card: React.FC<CardProps> = ({ user }) => {
     <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
       <h2>Name: {user.name}</h2>
       <p>Description: {user.description}</p>
-      <img
+      <Image
         src={user.image}
         width={600}
         height={500}
