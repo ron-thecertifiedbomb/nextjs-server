@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../dbConfig/dbConfig";
 import { ObjectId } from "mongodb";
 
-
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
@@ -14,8 +13,7 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("products");
     const productId = request.query._id as string;
-    const updateData = JSON.parse(request.body);
-
+    const { images } = JSON.parse(request.body);
 
     const existingProduct = await collection.findOne({
       _id: new ObjectId(productId),
@@ -26,9 +24,13 @@ export default async function handler(
       return;
     }
 
+    const updatedImages = existingProduct.images
+      ? [...existingProduct.images, ...images]
+      : images;
+
     const updatedProduct = await collection.findOneAndUpdate(
       { _id: new ObjectId(productId) },
-      { $set: updateData },
+      { $set: { images: updatedImages } },
       { returnDocument: "after" }
     );
 
