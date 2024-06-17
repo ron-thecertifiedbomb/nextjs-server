@@ -1,12 +1,21 @@
-'use client'
+
+import { AsyncThunkAction } from "@reduxjs/toolkit";
+import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
-import { useAppSelector } from "../../lib/hooks";
+import { uploadImageAndUpdateProduct } from "../../lib/features/images/productImageThunk";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 
 export default function ProductPage(props) {
 
-  const images = useAppSelector((state) => state.storage.images.length)
+  const images = useAppSelector((state) => state.storage.images)
+  const productId = props.product._id;
 
-  console.log('Image Storage Quantity', images)
+  const dispatch = useAppDispatch()
+  
+  const handleUpload = () => {
+    dispatch(uploadImageAndUpdateProduct({ productId: productId, images }));
+  };
+
 
   return (
     <div>
@@ -14,6 +23,7 @@ export default function ProductPage(props) {
       <div style={{width: 200, height: 400}}>
       <MultiplePhotoUploader/>
         </div>
+        <button onClick={handleUpload}>Upload Images</button>
     </div>
   );
 }
@@ -30,3 +40,5 @@ export async function getServerSideProps({ params }) {
     props: { product },
   };
 }
+
+

@@ -20,6 +20,8 @@ export default function ProductPage({
     router.push(`/products/${id}`);
   };
 
+  console.log(products)
+
   return (
     <main>
       <h1>All Products</h1>
