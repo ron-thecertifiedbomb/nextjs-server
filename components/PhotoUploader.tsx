@@ -10,9 +10,10 @@ import {
 
 interface PhotoUploaderProps {
   key?: string | number;
+  productId: string | null;
 }
 
-const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
+const PhotoUploader: React.FC<PhotoUploaderProps> = ({productId}) => {
 
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progresspercent, setProgresspercent] = useState<number>(0);

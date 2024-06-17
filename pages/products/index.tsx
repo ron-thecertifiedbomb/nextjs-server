@@ -3,6 +3,7 @@ import { Product } from "./types";
 import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps<{ products: Product[] }> = async () => {
+  
   const res = await fetch(
     "https://nextjs-server-rho.vercel.app/api/products/getAllProducts/route"
   );
