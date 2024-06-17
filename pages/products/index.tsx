@@ -1,6 +1,6 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import { Product } from "./types";
 import { useRouter } from "next/router";
+import { Product } from "../../types/types";
 
 export const getServerSideProps: GetServerSideProps<{ products: Product[] }> = async () => {
   
@@ -20,7 +20,6 @@ export default function ProductPage({
     router.push(`/products/${id}`);
   };
 
-  console.log(products)
 
   return (
     <main>

@@ -1,6 +1,4 @@
 
-import { AsyncThunkAction } from "@reduxjs/toolkit";
-import { AsyncThunkConfig } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
 import { uploadImageAndUpdateProduct } from "../../lib/features/images/productImageThunk";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
