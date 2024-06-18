@@ -16,8 +16,9 @@ const imagesSlice = createSlice({
       state.imageUrls = action.payload;
     },
     uploadImages(state, action: PayloadAction<string[]>) {
-      
-      state.imageUrls = [...state.imageUrls, ...action.payload];
+      // Merge new imageUrls with existing ones, ensuring uniqueness
+      const uniqueUrls = Array.from(new Set([...state.imageUrls, ...action.payload]));
+      state.imageUrls = uniqueUrls;
     },
   },
 });
