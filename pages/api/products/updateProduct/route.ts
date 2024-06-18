@@ -26,7 +26,7 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("products");
     const productId = request.query._id as string;
-    const {  images,  otherProperties } = request.body;
+    const { images, otherProperties } = request.body;
 
     console.log("Payload Data Structure from Redux Store", images);
 
@@ -51,17 +51,27 @@ export default async function handler(
     }
 
     if (images) {
-      existingProduct.imageURLS= images;
+      existingProduct.imageURLS = images;
     }
 
     if (otherProperties) {
       updateNestedProperties(existingProduct, otherProperties);
     }
 
-    const updatedProduct = await existingProduct.save();
+    // Update the document in MongoDB
+    const result = await collection.updateOne(
+      { _id: new ObjectId(productId) },
+      { $set: existingProduct }
+    );
+
+    if (result.modifiedCount === 0) {
+      throw new Error("Failed to update product");
+    }
+
+    // Return the original document after update
     response.status(200).json({
       message: "Product updated successfully",
-      updatedProduct: updatedProduct.value,
+      updatedProduct: existingProduct,
     });
   } catch (error) {
     console.error("Error updating product:", error);
