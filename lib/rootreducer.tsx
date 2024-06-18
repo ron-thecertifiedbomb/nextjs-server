@@ -7,6 +7,7 @@ const rootReducer = combineReducers({
   counter: counterReducer,
   storage: imageReducer,
   products: productReducer,
+  images: imageReducer,
 });
 
 export default rootReducer;

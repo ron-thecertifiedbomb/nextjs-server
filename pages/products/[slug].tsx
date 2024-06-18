@@ -1,20 +1,22 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
 import PhotoThumbNail from "../../components/PhotoThumbnail";
 import { uploadImageAndUpdateProduct } from '../../lib/features/images/productImageThunk';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../../lib/store';
 
+import {  selectImages } from '../../lib/features/images/productImagesSlice';
 
 export default function ProductPage({ product }) {
   const images = product.imageUrls;
   const totalNoOfImages: number = images.length;
-  const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch(); // Initialize dispatch function with ThunkDispatch
+  const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch(); 
 
+  const productImages = useSelector(selectImages);
 
   const handleUpload = () => {
-    // Dispatch thunk action when the button is clicked
-    dispatch(uploadImageAndUpdateProduct({ productId: product.id, images: images }));
+
+    dispatch(uploadImageAndUpdateProduct({ productId: product.id, imagesUrls: productImages }));
   };
 
   return (

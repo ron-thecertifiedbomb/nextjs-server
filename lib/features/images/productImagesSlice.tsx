@@ -12,6 +12,9 @@ const imagesSlice = createSlice({
   name: 'storage',
   initialState,
   reducers: {
+    totalImages(state) {
+      state.images
+    },
     productImages(state, action: PayloadAction<string[]>) {
       state.images = action.payload;
     },
@@ -24,6 +27,9 @@ const imagesSlice = createSlice({
   },
 });
 
-export const { productImages, uploadImages, clearImages } = imagesSlice.actions;
+export const { productImages, uploadImages, clearImages, totalImages } = imagesSlice.actions;
 
 export default imagesSlice.reducer;
+
+
+export const selectImages = (state: { storage: ImagesState }) => state.storage.images;
