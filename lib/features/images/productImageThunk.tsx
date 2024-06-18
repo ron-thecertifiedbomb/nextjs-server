@@ -7,7 +7,7 @@ interface UploadImagePayload {
 
 export const uploadImageAndUpdateProduct = createAsyncThunk(
   "products/uploadImageAndUpdateProduct",
-  async ({ productId, images }: UploadImagePayload, { rejectWithValue, dispatch }) => {
+  async ({ productId, images }: UploadImagePayload, { rejectWithValue }) => {
     const url = `https://nextjs-server-rho.vercel.app/api/products/updateProduct/route?_id=${productId}`;
 
     try {
@@ -25,18 +25,9 @@ export const uploadImageAndUpdateProduct = createAsyncThunk(
       }
 
       const data = await response.json();
-
-      // Dispatch an action to clear images array after successful upload
-      dispatch(clearImages());
-
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
-// Action creator to clear images array
-export const clearImages = () => ({
-  type: "products/clearImages",
-});
