@@ -28,6 +28,8 @@ export default async function handler(
     const productId = request.query._id as string;
     const {  images,  otherProperties } = JSON.parse(request.body);
 
+    console.error("Payload Data Structure from Redux Store", images);
+
     const updateNestedProperties = (target, source) => {
       for (const key in source) {
         if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
