@@ -1,4 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { clearImages } from "./productImagesSlice";
+
 
 interface UploadImagePayload {
   productId: string;
@@ -7,7 +9,7 @@ interface UploadImagePayload {
 
 export const uploadImageAndUpdateProduct = createAsyncThunk(
   "products/uploadImageAndUpdateProduct",
-  async ({ productId, images }: UploadImagePayload, { rejectWithValue }) => {
+  async ({ productId, images }: UploadImagePayload, { rejectWithValue, dispatch }) => {
     const url = `https://nextjs-server-rho.vercel.app/api/products/updateProduct/route?_id=${productId}`;
 
     try {
@@ -25,9 +27,11 @@ export const uploadImageAndUpdateProduct = createAsyncThunk(
       }
 
       const data = await response.json();
+      dispatch(clearImages()); 
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+

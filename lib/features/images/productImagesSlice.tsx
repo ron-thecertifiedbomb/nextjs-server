@@ -18,9 +18,12 @@ const imagesSlice = createSlice({
     uploadImages(state, action: PayloadAction<string[]>) {
       state.images = [...state.images, ...action.payload];
     },
+    clearImages(state) {
+      state.images = [];
+    },
   },
 });
 
-export const { productImages, uploadImages } = imagesSlice.actions;
+export const { productImages, uploadImages, clearImages } = imagesSlice.actions;
 
 export default imagesSlice.reducer;
