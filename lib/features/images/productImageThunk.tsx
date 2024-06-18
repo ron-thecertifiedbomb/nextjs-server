@@ -12,14 +12,12 @@ export const uploadImageAndUpdateProduct = createAsyncThunk(
 
     try {
       const imageUrls = JSON.stringify({ images });
-      const updatedData = JSON.stringify({ imageUrls });
-
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: updatedData,
+        body: imageUrls,
       });
 
       if (!response.ok) {
