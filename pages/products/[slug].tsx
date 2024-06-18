@@ -4,12 +4,13 @@ import PhotoThumbNail from "../../components/PhotoThumbnail";
 export default function ProductPage({ product }) {
 
   const images = product.imageUrls 
+  const totalNoOfImages: number = images.length
 
   return (
     <main>
       <h1>{product?.productName}</h1>
       <div style={{ width: 200 }}>
-        <MultiplePhotoUploader />
+        <MultiplePhotoUploader totalNoOfImages={totalNoOfImages} />
       </div>
       <PhotoThumbNail imageUrls={images} />
     </main>
