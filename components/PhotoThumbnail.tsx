@@ -1,10 +1,11 @@
+'use client'
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from '../styles/PhotoThumbnail.module.css';
 import { Product } from "../types/types";
 
 interface PhotoThumbNailProps {
-    imageUrls: string[]; // Assuming imageUrls is an array of strings
+    imageUrls: string[]; 
 }
 
 const PhotoThumbNail: React.FC<PhotoThumbNailProps> = ({ imageUrls }) => {
