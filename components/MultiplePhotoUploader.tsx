@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
-import PhotoUploader from "./PhotoUploader";
 
 interface MultiplePhotoUploaderProps {
   totalNoOfImages: number;
@@ -13,7 +12,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
   const [uploaders, setUploaders] = useState<number[]>([0]);
 
   const addUploader = () => {
-    if (total < 4) { // Change the limit to 4
+    if (total < 4) {
       setTotal(total + 1);
       setUploaders([...uploaders, total]);
     }
@@ -23,7 +22,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {uploaders.map((uploader, index) => (
         <div key={index} style={{ display: "flex", gap: 10 }}>
-          <PhotoUploader key={uploader} />
+          {/* Removed PhotoUploader rendering */}
           {index > 0 && (
             <Button
               variant="contained"
@@ -43,7 +42,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
           Add Images
         </Button>
       )}
-      {total >= 4 && ( // Change the limit to 4
+      {total >= 4 && (
         <p style={{ color: "red" }}>
           Maximum upload limit reached ({totalNoOfImages} images)
         </p>
