@@ -26,7 +26,18 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("products");
     const productId = request.query._id as string;
-    const { images } = JSON.parse(request.body);
+    const {  images,  otherProperties } = JSON.parse(request.body);
+
+    const updateNestedProperties = (target, source) => {
+      for (const key in source) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+          if (!target[key]) target[key] = {};
+          updateNestedProperties(target[key], source[key]);
+        } else {
+          target[key] = source[key];
+        }
+      }
+    };
 
     const existingProduct = await collection.findOne({
       _id: new ObjectId(productId),
@@ -37,16 +48,15 @@ export default async function handler(
       return;
     }
 
-    const updatedImages = existingProduct.images
-      ? [...existingProduct.images, ...images]
-      : images;
+    if (images) {
+      existingProduct.images = images;
+    }
 
-    const updatedProduct = await collection.findOneAndUpdate(
-      { _id: new ObjectId(productId) },
-      { $set: { images: updatedImages } },
-      { returnDocument: "after" }
-    );
+    if (otherProperties) {
+      updateNestedProperties(existingProduct, otherProperties);
+    }
 
+    const updatedProduct = await existingProduct.save();
     response.status(200).json({
       message: "Product updated successfully",
       updatedProduct: updatedProduct.value,
