@@ -27,7 +27,7 @@ export default function ProductPage({
       <ul>
         {products.map((product) => (
           <li key={product._id}>
-            <p>{product.name}</p>
+            <p>{product.productName}</p>
             <button onClick={() => handleProductClick(product._id)}>View Product</button>
           </li>
         ))}
