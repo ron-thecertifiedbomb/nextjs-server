@@ -38,13 +38,13 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
           )}
         </div>
       ))}
-      {total < 4 && (
+      {total < 5 && (
         <Button variant="contained" color="primary" onClick={addUploader}>
           Add Images
         </Button>
       )}
-      {total >= 4 && (
-        <p style={{ color: "red" }}>Maximum upload limit reached (4 images)</p>
+      {total >= 5 && (
+        <p style={{ color: "red" }}>Maximum upload limit reached {totalNoOfImages} images</p>
       )}
     </div>
   );

@@ -6,10 +6,10 @@ import {
   uploadBytesResumable,
   UploadTask,
 } from "firebase/storage";
-import { useAppDispatch, useAppSelector } from "../lib/hooks";
+import { useAppDispatch } from "../lib/hooks";
 import { uploadImages } from "../lib/features/images/productImagesSlice";
 import Image from "next/image";
-import { selectProductImagesById } from "../lib/features/images/productSelector";
+
 
 interface PhotoUploaderProps {
   key?: string | number;
@@ -18,9 +18,6 @@ interface PhotoUploaderProps {
 const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
 
 
-
-
-  
   const dispatch = useAppDispatch();
 
   const [imgUrl, setImgUrl] = useState<string | null>(null);
