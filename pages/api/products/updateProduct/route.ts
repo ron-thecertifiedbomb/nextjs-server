@@ -51,14 +51,14 @@ export default async function handler(
     }
 
     if (images) {
-      existingProduct.imageURLS = images;
+      existingProduct.imageUrls = images;
     }
 
     if (otherProperties) {
       updateNestedProperties(existingProduct, otherProperties);
     }
 
-    // Update the document in MongoDB
+
     const result = await collection.updateOne(
       { _id: new ObjectId(productId) },
       { $set: existingProduct }
@@ -68,7 +68,7 @@ export default async function handler(
       throw new Error("Failed to update product");
     }
 
-    // Return the original document after update
+
     response.status(200).json({
       message: "Product updated successfully",
       updatedProduct: existingProduct,
