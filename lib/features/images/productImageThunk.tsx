@@ -9,6 +9,7 @@ interface UploadImagePayload {
 
 export const uploadImageAndUpdateProduct = createAsyncThunk(
   "products/uploadImageAndUpdateProduct",
+  
   async ({ productId, imagesUrls }: UploadImagePayload, { rejectWithValue, dispatch }) => {
     const url = `https://nextjs-server-rho.vercel.app/api/products/updateProduct/route?_id=${productId}`;
 
