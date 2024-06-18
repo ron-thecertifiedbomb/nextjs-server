@@ -7,7 +7,7 @@ import {
   UploadTask,
 } from "firebase/storage";
 import { useAppDispatch } from "../lib/hooks";
-import { uploadImages } from "../lib/features/images/productImagesSlice";
+import { productImages } from "../lib/features/images/productImagesSlice";
 import Image from "next/image";
 
 interface PhotoUploaderProps {
@@ -47,7 +47,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImgUrl(downloadURL);
-          dispatch(uploadImages([downloadURL]));
+          dispatch(productImages([downloadURL]));
           setIsUploading(false);
         });
       }
