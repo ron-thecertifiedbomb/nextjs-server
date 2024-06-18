@@ -28,8 +28,8 @@ const ProductPage = ({ products }: ProductPageProps) => {
     dispatch(allProducts(products));
   }, [dispatch, products]);
 
-  const handleProductClick = (id: string) => {
-    router.push(`/products/${id}`);
+  const handleProductClick = (productName: string) => {
+    router.push(`/products/${encodeURIComponent(productName)}`); 
   };
 
   return (
@@ -39,7 +39,7 @@ const ProductPage = ({ products }: ProductPageProps) => {
         {products.map((product) => (
           <li key={product._id}>
             <p>{product.productName}</p>
-            <button onClick={() => handleProductClick(product._id)}>
+            <button onClick={() => handleProductClick(product.productName)}>
               View Product
             </button>
           </li>

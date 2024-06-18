@@ -1,17 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '../../../../dbConfig/dbConfig';
-import { ObjectId } from 'mongodb';
 
 export default async function GET(request: NextApiRequest, response: NextApiResponse) {
   let client;
 
   try {
-    const productId = request.query._id as string;
+    const productName = request.query.productName as string;
     client = await connectToDatabase();
     const db = client.db('storage');
     const collection = db.collection('products');
 
-    const product = await collection.findOne({  _id: new ObjectId(productId) });
+    const product = await collection.findOne({ productName });
 
     if (!product) {
       response.status(404).json({ message: 'Product not found' });

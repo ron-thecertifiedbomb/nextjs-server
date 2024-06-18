@@ -13,15 +13,13 @@ import { selectProductImagesById } from "../lib/features/images/productSelector"
 
 interface PhotoUploaderProps {
   key?: string | number;
-  productId: string;
 }
 
-const PhotoUploader: React.FC<PhotoUploaderProps> = ({ productId}) => {
-
-  const images = useAppSelector(selectProductImagesById(productId));
+const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
 
 
-  console.log('images from redux', images)
+
+
   
   const dispatch = useAppDispatch();
 

@@ -1,0 +1,35 @@
+.thumbnailContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+ justify-content: center;
+ align-items: center;
+ align-content: center;
+ 
+}
+
+.thumbnail {
+    width: 150px;
+    height: 150px;
+ 
+
+}
+.boxesWrapper {
+  
+display: flex;
+flex-direction: row;
+gap: 10px;
+
+}
+.smallBox {
+    width: 80x;
+    height: 80px;
+    border-radius: 10px;
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
