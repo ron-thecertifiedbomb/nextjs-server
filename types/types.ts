@@ -2,7 +2,7 @@ export interface Product {
   _id:             string;
   availableColors: string[];
   category:        string;
-  imageUrls:       any[];
+  imageUrls:       string[];
   includedItems?:  string[];
   manufacturer:    string;
   price:           number;

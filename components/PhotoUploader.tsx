@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent} from "react";
+import React, { useState, ChangeEvent } from "react";
 import { storage } from "../firebase";
 import {
   ref,
@@ -6,19 +6,24 @@ import {
   uploadBytesResumable,
   UploadTask,
 } from "firebase/storage";
-import { useAppDispatch } from "../lib/hooks";
+import { useAppDispatch, useAppSelector } from "../lib/hooks";
 import { uploadImages } from "../lib/features/images/productImagesSlice";
 import Image from "next/image";
+import { selectProductImagesById } from "../lib/features/images/productSelector";
 
 interface PhotoUploaderProps {
   key?: string | number;
-
+  productId: string;
 }
 
-const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
+const PhotoUploader: React.FC<PhotoUploaderProps> = ({ productId}) => {
+
+  const images = useAppSelector(selectProductImagesById(productId));
 
 
-  const dispatch = useAppDispatch()
+  console.log('images from redux', images)
+  
+  const dispatch = useAppDispatch();
 
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [progresspercent, setProgresspercent] = useState<number>(0);
@@ -49,6 +54,8 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
           setImgUrl(downloadURL);
           dispatch(uploadImages([downloadURL]));
           setIsUploading(false);
+          event.target.value = "";
+          setProgresspercent(0);
         });
       }
     );
@@ -59,12 +66,17 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
       <input type="file" onChange={handleFileChange} />
       {isUploading && progresspercent > 0 && (
         <div className="outerbar">
-          <div className="innerbar" style={{ width: `${progresspercent}%` }}>
+          <div
+            className="innerbar"
+            style={{ width: `${progresspercent}%` }}
+          >
             {progresspercent}%
           </div>
         </div>
       )}
-      {imgUrl && <Image src={imgUrl} alt="image_link" height={200} />}
+      {imgUrl && (
+        <Image src={imgUrl} alt="image_link" width={200} height={200} />
+      )}
     </div>
   );
 };

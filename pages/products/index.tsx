@@ -1,8 +1,11 @@
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import { Product } from "../../types/types";
+import { allProducts } from "../../lib/features/images/getAllProductSlice";
 
-export const getServerSideProps: GetServerSideProps<{ products: Product[] }> = async () => {
+
+export const getServerSideProps = async () => {
   
   const res = await fetch(
     "https://nextjs-server-rho.vercel.app/api/products/getAllProducts/route"
@@ -11,15 +14,23 @@ export const getServerSideProps: GetServerSideProps<{ products: Product[] }> = a
   return { props: { products } };
 };
 
-export default function ProductPage({
-  products,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+interface ProductPageProps {
+  products: Product[];
+}
+
+const ProductPage = ({ products }: ProductPageProps) => {
+  
+  const dispatch = useDispatch();
   const router = useRouter();
+
+  useEffect(() => {
+   
+    dispatch(allProducts(products));
+  }, [dispatch, products]);
 
   const handleProductClick = (id: string) => {
     router.push(`/products/${id}`);
   };
-
 
   return (
     <main>
@@ -28,10 +39,14 @@ export default function ProductPage({
         {products.map((product) => (
           <li key={product._id}>
             <p>{product.productName}</p>
-            <button onClick={() => handleProductClick(product._id)}>View Product</button>
+            <button onClick={() => handleProductClick(product._id)}>
+              View Product
+            </button>
           </li>
         ))}
       </ul>
     </main>
   );
-}
+};
+
+export default ProductPage;
