@@ -1,16 +1,28 @@
+import { useDispatch } from 'react-redux';
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
 import PhotoThumbNail from "../../components/PhotoThumbnail";
+import { uploadImageAndUpdateProduct } from '../../lib/features/images/productImageThunk';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../lib/store';
+
 
 export default function ProductPage({ product }) {
+  const images = product.imageUrls;
+  const totalNoOfImages: number = images.length;
+  const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch(); // Initialize dispatch function with ThunkDispatch
 
-  const images = product.imageUrls 
-  const totalNoOfImages: number = images.length
+
+  const handleUpload = () => {
+    // Dispatch thunk action when the button is clicked
+    dispatch(uploadImageAndUpdateProduct({ productId: product.id, images: images }));
+  };
 
   return (
     <main>
       <h1>{product?.productName}</h1>
       <div style={{ width: 200 }}>
         <MultiplePhotoUploader totalNoOfImages={totalNoOfImages} />
+        <button onClick={handleUpload}>Upload Images</button> {/* Button to trigger thunk */}
       </div>
       <PhotoThumbNail imageUrls={images} />
     </main>

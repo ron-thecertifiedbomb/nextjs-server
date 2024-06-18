@@ -4,16 +4,16 @@ import { clearImages } from "./productImagesSlice";
 
 interface UploadImagePayload {
   productId: string;
-  images: string[];
+  imagesUrls: string[];
 }
 
 export const uploadImageAndUpdateProduct = createAsyncThunk(
   "products/uploadImageAndUpdateProduct",
-  async ({ productId, images }: UploadImagePayload, { rejectWithValue, dispatch }) => {
+  async ({ productId, imagesUrls }: UploadImagePayload, { rejectWithValue, dispatch }) => {
     const url = `https://nextjs-server-rho.vercel.app/api/products/updateProduct/route?_id=${productId}`;
 
     try {
-      const imageUrls = JSON.stringify({ images });
+      const imageUrls = JSON.stringify({ imagesUrls });
       const response = await fetch(url, {
         method: "POST",
         headers: {
