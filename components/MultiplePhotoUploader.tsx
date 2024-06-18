@@ -19,6 +19,13 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
     }
   };
 
+  const removeUploader = (index: number) => {
+    if (total > totalNoOfImages) {
+      setUploaders(uploaders.filter((_, idx) => idx !== index));
+      setTotal(total - 1);
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {uploaders.map((uploader, index) => (
@@ -28,10 +35,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
             <Button
               variant="contained"
               color="primary"
-              onClick={() => {
-                setUploaders(uploaders.filter((_, idx) => idx !== index));
-                setTotal(total - 1);
-              }}
+              onClick={() => removeUploader(index)}
             >
               Remove
             </Button>
@@ -45,7 +49,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
       )}
       {total >= 4 && (
         <p style={{ color: "red" }}>
-          Maximum upload limit reached ({totalNoOfImages} images)
+          Maximum upload limit reached (4 images)
         </p>
       )}
     </div>
