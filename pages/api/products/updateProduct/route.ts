@@ -26,7 +26,7 @@ export default async function handler(
     const db = client.db("storage");
     const collection = db.collection("products");
     const productId = request.query._id as string;
-    const {  images,  otherProperties } = JSON.parse(request.body);
+    const {  images,  otherProperties } = request.body;
 
     console.log("Payload Data Structure from Redux Store", images);
 
