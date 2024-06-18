@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 
 export default function ProductPage(props) {
 
-  const images = useAppSelector((state) => state.storage.imageUrls)
+  const images = useAppSelector((state) => state.storage.images)
   const productId = props.product._id;
 
 

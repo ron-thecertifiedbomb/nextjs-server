@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ImagesState {
-  imageUrls: string[];
+  images: string[];
 }
 
 const initialState: ImagesState = {
-  imageUrls: [],
+  images: [],
 };
 
 const imagesSlice = createSlice({
@@ -13,15 +13,11 @@ const imagesSlice = createSlice({
   initialState,
   reducers: {
     productImages(state, action: PayloadAction<string[]>) {
-      state.imageUrls = action.payload;
+      state.images = action.payload;
     },
-    uploadImages(state, action: PayloadAction<string | string[]>) {
-      // Check if action.payload is an array
-      const newImageUrls = Array.isArray(action.payload) ? action.payload : [action.payload];
-      
-      // Merge new imageUrls with existing ones, ensuring uniqueness
-      const uniqueUrls = Array.from(new Set([...state.imageUrls, ...newImageUrls]));
-      state.imageUrls = uniqueUrls;
+    uploadImages(state, action: PayloadAction<string[]>) {
+      const imageUrls = action.payload;
+      state.images = [...state.images, ...imageUrls];
     },
   },
 });
