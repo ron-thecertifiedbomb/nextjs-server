@@ -16,8 +16,8 @@ const imagesSlice = createSlice({
       state.images = action.payload;
     },
     uploadImages(state, action: PayloadAction<string[]>) {
-      const imageUrls = action.payload;
-      state.images = [...state.images, ...imageUrls];
+      
+      state.images = [...state.images, ...action.payload];
     },
   },
 });

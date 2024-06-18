@@ -8,6 +8,9 @@ export default function ProductPage(props) {
   const images = useAppSelector((state) => state.storage.images)
   const productId = props.product._id;
 
+
+  console.log(images)
+
   const dispatch = useAppDispatch()
   
   const handleUpload = () => {
