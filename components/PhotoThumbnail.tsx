@@ -1,4 +1,4 @@
-'use client'
+
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from '../styles/PhotoThumbnail.module.css';
@@ -9,14 +9,16 @@ interface PhotoThumbNailProps {
 }
 
 const PhotoThumbNail: React.FC<PhotoThumbNailProps> = ({ imageUrls }) => {
+
+  const [mainImage, setMainImage] = useState(imageUrls[0]); 
+
   if (!imageUrls || imageUrls.length === 0) {
     return <div>No images available</div>;
   }
 
-  const [mainImage, setMainImage] = useState(imageUrls[0]); // State to track the main image
-
+  
   const handleThumbnailClick = (image: string) => {
-    setMainImage(image); // Set clicked image as the main image
+    setMainImage(image);
   };
 
   // Slice the array to get the last four images
