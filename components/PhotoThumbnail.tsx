@@ -27,7 +27,7 @@ const PhotoThumbNail: React.FC<PhotoThumbNailProps> = ({ imageUrls }) => {
   return (
     <main className={styles.thumbnailContainer}>
       <div className={styles.thumbnail} onClick={() => handleThumbnailClick(mainImage)}>
-        {/* Displaying the main image */}
+   
         <Image src={mainImage} alt="main_image" width={150} height={150} priority={false} />
       </div>
       <div className={styles.boxesWrapper}>
