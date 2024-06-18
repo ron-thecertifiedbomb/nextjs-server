@@ -16,7 +16,7 @@ export default function ProductPage({ product }) {
       const fetchProductData = async () => {
         try {
           const response = await fetch(
-            `https://nextjs-server-rho.vercel.app/api/products/getProduct/route?productName=${encodeURIComponent(productName)}`
+            `https://nextjs-server-rho.vercel.app/api/products/getProduct/route?productName=${encodeURIComponent(product?.productName)}`
           );
           if (response.ok) {
             const data = await response.json();

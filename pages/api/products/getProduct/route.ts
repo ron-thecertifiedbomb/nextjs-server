@@ -5,7 +5,12 @@ export default async function GET(request: NextApiRequest, response: NextApiResp
   let client;
 
   try {
-    const productName = request.query.productName as string;
+    const { productName } = request.query;
+    if (!productName || typeof productName !== 'string') {
+      response.status(400).json({ message: 'Invalid product name' });
+      return;
+    }
+
     client = await connectToDatabase();
     const db = client.db('storage');
     const collection = db.collection('products');
