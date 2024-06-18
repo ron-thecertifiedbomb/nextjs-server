@@ -51,7 +51,7 @@ export default async function handler(
     }
 
     if (images) {
-      existingProduct.imageUrls = images;
+      existingProduct.imageURLS= images;
     }
 
     if (otherProperties) {
