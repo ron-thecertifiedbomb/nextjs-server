@@ -43,7 +43,7 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
         </div>
       ))}
       {total < 4 && (
-        <Button variant="contained" color="primary" onClick={addUploader}>
+        <Button variant="contained" color="primary" onClick={addUploader} style={{ display: total >= 4 ? "none" : '' }}>
           Add Images
         </Button>
       )}
