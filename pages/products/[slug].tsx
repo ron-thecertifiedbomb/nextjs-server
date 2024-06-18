@@ -1,8 +1,4 @@
-import { useEffect } from "react";
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
-import { uploadImageAndUpdateProduct } from "../../lib/features/images/productImageThunk";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { selectProductById } from "../../lib/features/images/productSelector";
 import PhotoThumbNail from "../../components/PhotoThumbnail";
 
 export default function ProductPage({ product }) {
