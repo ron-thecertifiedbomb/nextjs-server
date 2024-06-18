@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@mui/material";
+import PhotoUploader from "./PhotoUploader";
 
 interface MultiplePhotoUploaderProps {
   totalNoOfImages: number;
@@ -21,8 +22,8 @@ const MultiplePhotoUploader: React.FC<MultiplePhotoUploaderProps> = ({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {uploaders.map((uploader, index) => (
-        <div key={index} style={{ display: "flex", gap: 10 }}>
-          {/* Removed PhotoUploader rendering */}
+        <div key={index} style={{ display: total >= 4 ? "none" : "flex", gap: 10 }}>
+          <PhotoUploader key={uploader} />
           {index > 0 && (
             <Button
               variant="contained"
