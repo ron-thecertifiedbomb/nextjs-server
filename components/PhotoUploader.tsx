@@ -70,7 +70,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = () => {
         </div>
       )}
       {imgUrl && (
-        <Image src={imgUrl} alt="image_link" width={200} height={200} />
+        <Image src={imgUrl} alt="image_link" width={200} height={200} priority={false} />
       )}
     </div>
   );
