@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../dbConfig/dbConfig";
 import { ObjectId } from "mongodb";
 
-// Define the Product interface with proper typing
+
 interface Product {
   _id: ObjectId;
   productName: string;
-  // Add other fields as per your schema
+
 }
 
 export default async function handler(
@@ -24,13 +24,13 @@ export default async function handler(
   }
 
   let client;
-  let productId: string; // Declare productId with appropriate type
+  let productId: string; 
 
   try {
     client = await connectToDatabase();
     const db = client.db("storage");
     
-    // Use Product interface with proper typing
+ 
     const collection = db.collection("products");
 
     productId = req.query._id as string; 
