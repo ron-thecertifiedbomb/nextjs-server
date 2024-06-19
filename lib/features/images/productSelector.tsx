@@ -19,3 +19,9 @@ export const selectProductById = (productId: string) =>
 
 
     export const selectProductImages = (state: RootState) => state.storage.images;
+
+
+    export const productDetails =  (state: RootState) => state.products.products;
+
+
+ 

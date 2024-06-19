@@ -4,21 +4,36 @@ import PhotoThumbNail from "../../components/PhotoThumbnail";
 import { uploadImageAndUpdateProduct } from "../../lib/features/images/productImageThunk";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../../lib/store";
-import { selectImages } from "../../lib/features/images/productImagesSlice";
+import {  selectImages } from "../../lib/features/images/productImagesSlice";
+import { useEffect } from "react";
+import { getProduct, productImages } from "../../lib/features/images/getAllProductSlice";
+import { productDetails } from "../../lib/features/images/productSelector";
+
 
 export default function ProductPage({ product }) {
+
   const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
+
   const images = product.imageUrls;
   const productId = product._id;
-  const totalNoOfImages: number = images.length;
 
-  const imagesUrls = useSelector(selectImages);
   
+  const imagesUrls = useSelector(selectImages);
+  const imagesData = useSelector(productImages); 
+  const totalNoOfImages: number = imagesData.length;
+  
+  console.log('Total Images from Store', totalNoOfImages)
+
   const handleUpload = () => {
     dispatch(
       uploadImageAndUpdateProduct({ productId: productId, payload: imagesUrls })
     );
   };
+  useEffect(() => {
+    dispatch(getProduct(product));
+  }, [dispatch, product]);
+
+ 
 
   return (
     <main>

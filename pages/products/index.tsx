@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Product } from "../../types/types";
-import { allProducts } from "../../lib/features/images/getAllProductSlice";
+import { getAllProducts } from "../../lib/features/images/getAllProductSlice";
 
 
 export const getServerSideProps = async () => {
@@ -20,13 +20,7 @@ interface ProductPageProps {
 
 const ProductPage = ({ products }: ProductPageProps) => {
   
-  const dispatch = useDispatch();
   const router = useRouter();
-
-  useEffect(() => {
-   
-    dispatch(allProducts(products));
-  }, [dispatch, products]);
 
   const handleProductClick = (productName: string) => {
     router.push(`/products/${encodeURIComponent(productName)}`); 
