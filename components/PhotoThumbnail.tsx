@@ -31,7 +31,7 @@ const PhotoThumbNail: React.FC<PhotoThumbNailProps> = ({ imageUrls }) => {
       <div className={styles.boxesWrapper}>
         {imageUrls.map((image, index) => (
           <div key={index} className={styles.smallBox} onClick={() => handleThumbnailClick(image)}>
-            <Image src={image} alt={`image_link_${index}`} width={80} height={80} priority={false} />
+            <Image src={image} alt={`image_link_${index}`} width={65} height={65} priority={false} />
           </div>
         ))}
       </div>
