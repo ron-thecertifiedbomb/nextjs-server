@@ -15,40 +15,52 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const client = await connectToDatabase();
-    const productId = req.query._id as string; // Assuming productId is a string
-    const payload = req.body.payload; // Assuming payload is an array of strings
+    const productId = req.query._id as string; 
+    const payload = req.body.payload as string[]; 
 
-    console.log('Payload from Redux', payload);
+    console.log('Payload from Redux:', payload);
 
-    if (!productId || typeof productId !== 'string') {
-      res.status(400).json({ message: 'Product ID is required' });
+ 
+    if (!ObjectId.isValid(productId)) {
+      res.status(400).json({ message: 'Invalid product ID' });
       return;
     }
 
-    if (!payload || !Array.isArray(payload) || payload.some(url => typeof url !== 'string')) {
+   
+    if (!Array.isArray(payload) || payload.some(url => typeof url !== 'string')) {
       res.status(400).json({ message: 'Invalid payload format. Payload must be an array of strings.' });
       return;
     }
 
     const collection = client.db('storage').collection('products');
 
-    // Update the imageUrls field in the product document
-    const result = await collection.findOneAndUpdate(
-      { _id: new ObjectId(productId) }, // Convert productId to ObjectId for MongoDB
-      { $addToSet: { imageUrls: { $each: payload } } }, // Use $each to add multiple elements to array
-      { returnDocument: 'after' } // To get the updated document
-    );
+    const product = await collection.findOne({ _id: new ObjectId(productId) });
 
-    if (!result.value) {
-      res.status(404).json({ message: `Product with ID ${productId} not found` });
+    if (!product) {
+      res.status(404).json({ message: 'Product not found' });
       return;
     }
 
-    
+    console.log('Product Found', product);
+
+
+    const result = await collection.updateOne(
+      { _id: new ObjectId(productId) },
+      { $addToSet: { imageUrls: { $each: payload } } }, 
+    );
+
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ message: `Failed to update product with ID ${productId}` });
+      return;
+    }
+
+
+    const updatedProduct = await collection.findOne({ _id: new ObjectId(productId) });
+
     res.status(200).json({
-      message: 'Image URLs added successfully',
-      imageUrls: result.value.imageUrls,
-      product: result.value,
+      message: 'Images added successfully',
+      imageUrls: updatedProduct.imageUrls,
+      product: updatedProduct,
     });
 
   } catch (error) {

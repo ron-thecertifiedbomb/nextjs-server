@@ -1,25 +1,23 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import MultiplePhotoUploader from "../../components/MultiplePhotoUploader";
 import PhotoThumbNail from "../../components/PhotoThumbnail";
-import { uploadImageAndUpdateProduct } from '../../lib/features/images/productImageThunk';
-import { ThunkDispatch } from '@reduxjs/toolkit';
-import { RootState } from '../../lib/store';
-import { selectImages } from '../../lib/features/images/productImagesSlice';
+import { uploadImageAndUpdateProduct } from "../../lib/features/images/productImageThunk";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "../../lib/store";
+import { selectImages } from "../../lib/features/images/productImagesSlice";
 
 export default function ProductPage({ product }) {
   const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
   const images = product.imageUrls;
-const productId = product._id;
+  const productId = product._id;
   const totalNoOfImages: number = images.length;
-  
+
   const imagesUrls = useSelector(selectImages);
-
-
-  console.log('Reduxt store images ', imagesUrls)
-  console.log('Product Id ', productId)
-
+  
   const handleUpload = () => {
-    dispatch(uploadImageAndUpdateProduct({ productId: productId, payload: imagesUrls }));
+    dispatch(
+      uploadImageAndUpdateProduct({ productId: productId, payload: imagesUrls })
+    );
   };
 
   return (
@@ -39,7 +37,9 @@ const productId = product._id;
 export async function getServerSideProps({ params }) {
   const { slug } = params;
   const response = await fetch(
-    `https://nextjs-server-rho.vercel.app/api/products/getProduct/route?productName=${encodeURIComponent(slug)}`
+    `https://nextjs-server-rho.vercel.app/api/products/getProduct/route?productName=${encodeURIComponent(
+      slug
+    )}`
   );
   const product = await response.json();
 
