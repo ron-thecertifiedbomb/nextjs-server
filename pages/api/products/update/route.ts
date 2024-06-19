@@ -1,76 +1,58 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import connectToDatabase from "../../../../dbConfig/dbConfig";
-import { ObjectId } from "mongodb";
+import { NextApiRequest, NextApiResponse } from 'next';
+import connectToDatabase from '../../../../dbConfig/dbConfig';
+import { ObjectId } from 'mongodb';
 
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Set CORS headers (adjust as needed)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-interface Product {
-  _id: ObjectId;
-  productName: string;
-
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // Set CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
-  let client;
-  let productId: string; 
-
   try {
-    client = await connectToDatabase();
-    const db = client.db("storage");
-    
- 
-    const collection = db.collection("products");
+    const client = await connectToDatabase();
+    const productId = req.query._id as string; // Assuming productId is a string
+    const payload = req.body.payload; // Assuming payload is an array of strings
 
-    productId = req.query._id as string; 
-    const { payload } = req.body;
+    console.log('Payload from Redux', payload);
 
-    if (!ObjectId.isValid(productId)) {
-      res.status(400).json({ message: "Invalid product ID" });
+    if (!productId || typeof productId !== 'string') {
+      res.status(400).json({ message: 'Product ID is required' });
       return;
     }
 
-  
-    if (!Array.isArray(payload) || payload.some(url => typeof url !== 'string')) {
-      res.status(400).json({ message: "Invalid payload format" });
+    if (!payload || !Array.isArray(payload) || payload.some(url => typeof url !== 'string')) {
+      res.status(400).json({ message: 'Invalid payload format. Payload must be an array of strings.' });
       return;
     }
 
-    
-    const updatedProduct = await collection.findOneAndUpdate(
-      { _id: new ObjectId(productId) },
-      { $push: { imageUrls: { $each: payload } } },
-      { returnDocument: 'after' } 
+    const collection = client.db('storage').collection('products');
+
+    // Update the imageUrls field in the product document
+    const result = await collection.findOneAndUpdate(
+      { _id: new ObjectId(productId) }, // Convert productId to ObjectId for MongoDB
+      { $addToSet: { imageUrls: { $each: payload } } }, // Use $each to add multiple elements to array
+      { returnDocument: 'after' } // To get the updated document
     );
 
-    const updatedProductData = updatedProduct.value;
-
-    if (!updatedProductData) {
-      throw new Error(`Failed to update product with ID ${productId}`);
+    if (!result.value) {
+      res.status(404).json({ message: `Product with ID ${productId} not found` });
+      return;
     }
 
+    
     res.status(200).json({
-      message: "Image URLs added successfully",
-      imageUrls: updatedProductData.imageUrls,
-      product: updatedProductData,
+      message: 'Image URLs added successfully',
+      imageUrls: result.value.imageUrls,
+      product: result.value,
     });
+
   } catch (error) {
-    console.error(`Error updating product with ID ${productId}:`, error);
-    res.status(500).json({ message: "Error updating image URLs", error: error.message });
-  } finally {
-    if (client) {
-      await client.close();
-    }
+    console.error('Error updating product:', error);
+    res.status(500).json({ message: 'Error updating image URLs', error: error.message });
   }
 }

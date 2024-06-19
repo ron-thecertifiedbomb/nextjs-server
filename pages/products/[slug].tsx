@@ -9,18 +9,17 @@ import { selectImages } from '../../lib/features/images/productImagesSlice';
 export default function ProductPage({ product }) {
   const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
   const images = product.imageUrls;
+const productId = product._id;
   const totalNoOfImages: number = images.length;
   
   const imagesUrls = useSelector(selectImages);
 
-  console.log('Total images from MongoDB', totalNoOfImages)
 
-  console.log('Total images from Store', imagesUrls.length )
-
-  console.log('Payload', imagesUrls)
+  console.log('Reduxt store images ', imagesUrls)
+  console.log('Product Id ', productId)
 
   const handleUpload = () => {
-    dispatch(uploadImageAndUpdateProduct({ productId: product._id, payload: imagesUrls }));
+    dispatch(uploadImageAndUpdateProduct({ productId: productId, payload: imagesUrls }));
   };
 
   return (
