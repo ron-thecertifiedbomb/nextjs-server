@@ -1,7 +1,4 @@
-import { ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
-import { clearImages } from "./productImagesSlice";
-import { RootState } from "../../store";
-import { useDispatch } from "react-redux";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 interface UploadImagePayload {
   productId: string;
@@ -11,16 +8,15 @@ interface UploadImagePayload {
 export const uploadImageAndUpdateProduct = createAsyncThunk(
   "products/uploadImageAndUpdateProduct",
   async ({ productId, payload }: UploadImagePayload, { rejectWithValue }) => {
-    const url = `/api/products/update/route?_id=${productId}`;
-   
+    const url = `/api/products/update/route`;
+
     try {
-      const imageUrls = JSON.stringify({ payload });
       const response = await fetch(url, {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: imageUrls,
+        body: JSON.stringify({ productId, payload }), // Send both productId and payload
       });
 
       if (!response.ok) {
