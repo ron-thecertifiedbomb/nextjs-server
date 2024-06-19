@@ -1,20 +1,20 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { ThunkDispatch, createAsyncThunk } from "@reduxjs/toolkit";
 import { clearImages } from "./productImagesSlice";
-
+import { RootState } from "../../store";
+import { useDispatch } from "react-redux";
 
 interface UploadImagePayload {
   productId: string;
-  imagesUrls: string[];
+  payload: string[];
 }
 
 export const uploadImageAndUpdateProduct = createAsyncThunk(
   "products/uploadImageAndUpdateProduct",
-  
-  async ({ productId, imagesUrls }: UploadImagePayload, { rejectWithValue, dispatch }) => {
-    const url = `https://nextjs-server-rho.vercel.app/api/products/updateProduct/route?_id=${productId}`;
-
+  async ({ productId, payload }: UploadImagePayload, { rejectWithValue }) => {
+    const url = `/api/products/update/route?_id=${productId}`;
+   
     try {
-      const imageUrls = JSON.stringify({ imagesUrls });
+      const imageUrls = JSON.stringify({ payload });
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -28,11 +28,10 @@ export const uploadImageAndUpdateProduct = createAsyncThunk(
       }
 
       const data = await response.json();
-      dispatch(clearImages()); 
+      console.log("Message from backend:", data.message);
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
-
