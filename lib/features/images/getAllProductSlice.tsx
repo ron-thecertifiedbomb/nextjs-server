@@ -4,26 +4,31 @@ import { Product } from '../../../types/types';
 interface ProductsState {
   products: Product[];
   product: Product | null;
+  imageUrls: string[];
 }
 
 const initialState: ProductsState = {
   products: [],
   product: null,
+  imageUrls: [],
 };
 
 const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    allProducts(state, action: PayloadAction<Product[]>) {
+    getAllProducts(state, action: PayloadAction<Product[]>) {
       state.products = action.payload;
     },
-    singleProduct(state, action: PayloadAction<Product>) {
+    getProduct(state, action: PayloadAction<Product>) {
       state.product = action.payload;
     },
   },
 });
 
-export const { allProducts, singleProduct } = productSlice.actions;
+export const { getAllProducts, getProduct } = productSlice.actions;
 
 export default productSlice.reducer;
+
+
+export const productImages = (state: { products: ProductsState }) => state.products.product?.imageUrls || [];
