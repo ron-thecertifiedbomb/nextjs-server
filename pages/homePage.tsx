@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         <div className={styles.container}>
           <div className={styles.wrapper}>
             <h1>Welcome to Lizard Interactive Server</h1>
-            {/* <button onClick={handleClearImages}>Clear Images</button> */}
+            <button onClick={handleClearImages}>Clear Images</button>
       
           </div>
         </div>

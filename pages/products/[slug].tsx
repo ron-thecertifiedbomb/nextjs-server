@@ -14,9 +14,11 @@ export default function ProductPage({ product }) {
 
   const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
 
-
+  const images = product.imageUrls;
   const productId = product._id;
 
+  
+  const imagesUrls = useSelector(selectImages);
   const imagesData = useSelector(productImages); 
   const totalNoOfImages: number = imagesData.length;
   
@@ -24,7 +26,7 @@ export default function ProductPage({ product }) {
 
   const handleUpload = () => {
     dispatch(
-      uploadImageAndUpdateProduct({ productId: productId, payload: imagesData })
+      uploadImageAndUpdateProduct({ productId: productId, payload: imagesUrls })
     );
   };
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function ProductPage({ product }) {
           <button onClick={handleUpload}>Upload Images</button>
         )}
       </div>
-      <PhotoThumbNail imageUrls={imagesData} />
+      <PhotoThumbNail imageUrls={images} />
     </main>
   );
 }
