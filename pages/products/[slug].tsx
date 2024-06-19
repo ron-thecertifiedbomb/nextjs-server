@@ -7,11 +7,15 @@ import { RootState } from '../../lib/store';
 import { selectImages } from '../../lib/features/images/productImagesSlice';
 
 export default function ProductPage({ product }) {
+  const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
   const images = product.imageUrls;
   const totalNoOfImages: number = images.length;
-  const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
-
+  
   const imagesUrls = useSelector(selectImages);
+
+  console.log('Total images from MongoDB', totalNoOfImages)
+
+  console.log('Total images from Store', imagesUrls.length )
 
   console.log('Payload', imagesUrls)
 

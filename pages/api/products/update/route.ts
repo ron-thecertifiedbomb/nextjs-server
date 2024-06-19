@@ -1,8 +1,13 @@
-// pages/api/getImageUrls.js
-
 import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../dbConfig/dbConfig";
 import { ObjectId } from "mongodb";
+
+// Define the Product interface with proper typing
+interface Product {
+  _id: ObjectId;
+  productName: string;
+  // Add other fields as per your schema
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,7 +15,7 @@ export default async function handler(
 ) {
   // Set CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET");
+  res.setHeader("Access-Control-Allow-Methods", "POST");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -19,13 +24,16 @@ export default async function handler(
   }
 
   let client;
+  let productId: string; // Declare productId with appropriate type
 
   try {
-
     client = await connectToDatabase();
     const db = client.db("storage");
+    
+    // Use Product interface with proper typing
     const collection = db.collection("products");
-    const productId = req.query._id as string;
+
+    productId = req.query._id as string; 
     const { payload } = req.body;
 
     if (!ObjectId.isValid(productId)) {
@@ -33,28 +41,33 @@ export default async function handler(
       return;
     }
 
-    const product = await collection.findOne({ _id: new ObjectId(productId) });
-
- 
-    if (!product) {
-      res.status(404).json({ message: "Product not found" });
+  
+    if (!Array.isArray(payload) || payload.some(url => typeof url !== 'string')) {
+      res.status(400).json({ message: "Invalid payload format" });
       return;
     }
 
+    
+    const updatedProduct = await collection.findOneAndUpdate(
+      { _id: new ObjectId(productId) },
+      { $push: { imageUrls: { $each: payload } } },
+      { returnDocument: 'after' } 
+    );
 
-    console.log("Image URLs from the Redux Thunk Payload:", payload);
-    console.log("Product:", product);
-    console.log("Product ID:", productId);
+    const updatedProductData = updatedProduct.value;
 
-   
+    if (!updatedProductData) {
+      throw new Error(`Failed to update product with ID ${productId}`);
+    }
+
     res.status(200).json({
-      message: "Product transmitted successfully",
-      imageUrls: product.imageUrls,
-      product: product,
+      message: "Image URLs added successfully",
+      imageUrls: updatedProductData.imageUrls,
+      product: updatedProductData,
     });
   } catch (error) {
-    console.error("Error fetching product:", error);
-    res.status(500).json({ message: "Error fetching product", error: error.message });
+    console.error(`Error updating product with ID ${productId}:`, error);
+    res.status(500).json({ message: "Error updating image URLs", error: error.message });
   } finally {
     if (client) {
       await client.close();
