@@ -1,8 +1,16 @@
 import React from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useDispatch } from "react-redux";
+import { clearImages } from "../lib/features/images/productImagesSlice";
 
 const Home: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const handleClearImages = () => {
+    dispatch(clearImages());
+  };
+
   return (
     <>
       <Head>
@@ -14,6 +22,8 @@ const Home: React.FC = () => {
         <div className={styles.container}>
           <div className={styles.wrapper}>
             <h1>Welcome to Lizard Interactive Server</h1>
+            <button onClick={handleClearImages}>Clear Images</button>
+      
           </div>
         </div>
       </main>
@@ -22,3 +32,4 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
