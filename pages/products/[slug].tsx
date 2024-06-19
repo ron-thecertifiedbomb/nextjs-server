@@ -7,7 +7,9 @@ import { RootState } from "../../lib/store";
 import { selectImages } from "../../lib/features/images/productImagesSlice";
 
 export default function ProductPage({ product }) {
+
   const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
+  
   const images = product.imageUrls;
   const productId = product._id;
   const totalNoOfImages: number = images.length;
