@@ -14,21 +14,25 @@ export default function ProductPage({ product }) {
 
   const dispatch: ThunkDispatch<RootState, undefined, any> = useDispatch();
 
+  const productDetail = product
   const images = product.imageUrls;
   const productId = product._id;
-
-  
   const imagesUrls = useSelector(selectImages);
   const imagesData = useSelector(productImages); 
   const totalNoOfImages: number = imagesData.length;
   
-  console.log('Total Images from Store', totalNoOfImages)
+  // console.log('Total Images from Store', totalNoOfImages)
+  console.log('Product Detail Props', productDetail)
 
   const handleUpload = () => {
+
+
     dispatch(
       uploadImageAndUpdateProduct({ productId: productId, payload: imagesUrls })
     );
+
   };
+
   useEffect(() => {
     dispatch(getProduct(product));
   }, [dispatch, product]);

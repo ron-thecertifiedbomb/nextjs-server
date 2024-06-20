@@ -11,9 +11,8 @@ export const uploadImageAndUpdateProduct = createAsyncThunk(
     const url = `/api/products/update/route?_id=${productId}`;
 
     try {
+      
       const imageUrls = JSON.stringify({ payload });
-
-
       const response = await fetch(url, {
         method: "POST",
         headers: {
