@@ -23,3 +23,17 @@ export interface Product {
   type?:         string;
  }
  
+
+
+ export interface FoodItem {
+  _id:          string;
+  availability: string;
+  category:     string;
+  description:  string;
+  id:           number;
+  image:        string;
+  ingredients?: string[];
+  name:         string;
+  price:        string;
+ }
+ 
