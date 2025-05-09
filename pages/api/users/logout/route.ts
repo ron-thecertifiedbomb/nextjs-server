@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import connectToDatabase from "../../../../dbConfig/dbConfig";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 export default async function handler(
   request: NextApiRequest,
@@ -17,7 +16,7 @@ export default async function handler(
     const {
       username = "",
       password = "",
-      time = "",
+      lastLoggedIn = "",
       isLoggedIn = "",
     } = request.body;
 
@@ -39,30 +38,25 @@ export default async function handler(
       return response.status(400).json({ error: "Invalid password" });
     }
 
-    await collection.findOneAndUpdate(
+    await collection.updateOne(
+      { _id: existingUser._id },
       {
-        _id: existingUser._id,
-      },
-      {
-        $set: { lastLoggedIn: time, isLoggedIn: isLoggedIn },
-      },
-      {
-        returnDocument: "after",
-        upsert: true,
+        $set: {
+          lastLoggedIn: lastLoggedIn,
+          isLoggedIn: isLoggedIn,
+        },
       }
     );
 
-    response
-      .status(200)
-      .json({
-        message: "Logout successful",
-        firstName: existingUser.firstname,
-        lastName: existingUser.lastname,
-        userId: existingUser._id,
-        isLoggedIn: isLoggedIn,
-      });
+    response.status(200).json({
+      message: "Logout successful",
+      firstName: existingUser.firstname,
+      lastName: existingUser.lastname,
+      userId: existingUser._id,
+      isLoggedIn: isLoggedIn,
+    });
   } catch (error: any) {
-    console.error("Error during login:", error);
+    console.error("Error during logout:", error);
     response.status(500).json({ message: "Internal Server Error" });
   }
 }
