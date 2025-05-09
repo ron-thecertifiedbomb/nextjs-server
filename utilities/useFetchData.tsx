@@ -14,8 +14,6 @@ const useFetchData = <T,>(): UseFetchData<T> => {
   const [error, setError] = useState<string | null>(null);
 
   const url = process.env.NEXT_PUBLIC_API_URL || ""; 
-
- 
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);

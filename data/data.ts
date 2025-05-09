@@ -375,3 +375,28 @@ export const foodData = [
 ];
 
 
+
+export const menu = [
+  {
+      "id": 1,
+      "name": "Adobo",
+      "image": "https://www.eatwithcarmen.com/wp-content/uploads/2022/09/chicken-adobo_.jpg",
+      "price": 70,
+      "availableOrderQty": 10
+    },
+    {
+      "id": 2,
+      "name": "Rice",
+      "image": "https://cdn.loveandlemons.com/wp-content/uploads/2020/03/how-to-cook-rice-500x375.jpg",
+      "price": 15,
+      "availableOrderQty": 20
+    },
+    {
+      "id": 3,
+      "name": "Sinigang",
+      "image": "https://www.foxyfolksy.com/wp-content/uploads/2019/07/sinigang-na-baboy-640.jpg",
+      "price": 15,
+      "availableOrderQty": 10
+    }
+  
+];
