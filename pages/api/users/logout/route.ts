@@ -15,12 +15,11 @@ export default async function handler(
 
     const {
       username = "",
-      password = "",
       lastLoggedIn = "",
       isLoggedIn = "",
     } = request.body;
 
-    if (!username || !password) {
+    if (!username) {
       return response
         .status(400)
         .json({ error: "Username and password are required" });
@@ -33,10 +32,6 @@ export default async function handler(
       return response.status(409).json({ error: "Username does not exist" });
     }
 
-    const validPassword = await bcrypt.compare(password, existingUser.password);
-    if (!validPassword) {
-      return response.status(400).json({ error: "Invalid password" });
-    }
 
     await collection.updateOne(
       { _id: existingUser._id },
