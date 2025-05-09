@@ -40,7 +40,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
         _id: existingUser._id
       },
       { 
-        $set: { isLoggedIn: isLoggedIn } 
+        $set: {isLoggedIn: isLoggedIn } 
       },
       { 
         returnDocument: "after",
@@ -59,7 +59,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
 
     const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1h" });
 
-    response.status(200).json({ message: 'Authentication successful', firstName: existingUser.firstname, lastName: existingUser.lastname,  userId: existingUser._id,  isLoggedIn: isLoggedIn, token });
+    response.status(200).json({ message: 'Authentication successful', firstName: existingUser.firstname, lastName: existingUser.lastname,  userId: existingUser._id, isLoggedIn: isLoggedIn, token });
   } catch (error: any) {
     console.error('Error during login:', error);
     response.status(500).json({ message: 'Internal Server Error' });
