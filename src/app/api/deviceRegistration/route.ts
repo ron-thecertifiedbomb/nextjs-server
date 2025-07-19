@@ -53,11 +53,19 @@ export async function POST(req: NextRequest) {
       { message: "FCM details emailed successfully" },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
+  if (error instanceof Error) {
     console.error("❌ Failed to send email:", error);
     return NextResponse.json(
       { message: "Failed to send email", error: error.message },
       { status: 500 }
     );
   }
+
+  console.error("❌ Unknown error occurred", error);
+  return NextResponse.json(
+    { message: "Failed to send email", error: "Unknown error" },
+    { status: 500 }
+  );
+}
 }
