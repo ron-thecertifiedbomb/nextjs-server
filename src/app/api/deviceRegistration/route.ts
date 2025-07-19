@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -15,9 +14,17 @@ export async function OPTIONS() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { tokenCode, phone, isRegistered, dateRegistered, bearerToken } = body;
+  const {
+    tokenCode,
+    phone,
+    isRegistered,
+    dateRegistered,
+    user_id,
+    device_model,
+    device_platform,
+  } = body;
 
-  if (!tokenCode || !phone || !dateRegistered || !bearerToken) {
+  if (!tokenCode || !phone || !dateRegistered || !user_id) {
     return NextResponse.json(
       { message: "Missing required fields" },
       { status: 400 }
@@ -39,10 +46,12 @@ export async function POST(req: NextRequest) {
       subject: "📲 FCM Token Submission",
       text: `
 📲 FCM Token Code: ${tokenCode}
+🧑 User ID: ${user_id}
 📞 Phone: ${phone}
 🟢 Is Registered: ${isRegistered}
 📅 Date Registered: ${dateRegistered}
-🔐 Bearer Token: ${bearerToken}
+📱 Device Model: ${device_model}
+💻 Device Platform: ${device_platform}
       `,
     };
 
@@ -54,18 +63,18 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: unknown) {
-  if (error instanceof Error) {
-    console.error("❌ Failed to send email:", error);
+    if (error instanceof Error) {
+      console.error("❌ Failed to send email:", error);
+      return NextResponse.json(
+        { message: "Failed to send email", error: error.message },
+        { status: 500 }
+      );
+    }
+
+    console.error("❌ Unknown error occurred", error);
     return NextResponse.json(
-      { message: "Failed to send email", error: error.message },
+      { message: "Failed to send email", error: "Unknown error" },
       { status: 500 }
     );
   }
-
-  console.error("❌ Unknown error occurred", error);
-  return NextResponse.json(
-    { message: "Failed to send email", error: "Unknown error" },
-    { status: 500 }
-  );
-}
 }
