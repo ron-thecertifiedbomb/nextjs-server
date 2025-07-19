@@ -1,27 +1,27 @@
-import { NextApiRequest, NextApiResponse } from "next";
+
+import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
-  }
-
-  const { tokenCode, phone, isRegistered, dateRegistered, bearerToken } =
-    req.body;
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { tokenCode, phone, isRegistered, dateRegistered, bearerToken } = body;
 
   if (!tokenCode || !phone || !dateRegistered || !bearerToken) {
-    return res.status(400).json({ message: "Missing required fields" });
+    return NextResponse.json(
+      { message: "Missing required fields" },
+      { status: 400 }
+    );
   }
 
   try {
@@ -35,7 +35,7 @@ export default async function handler(
 
     const mailOptions = {
       from: "ronan.ramos.sibunga@gmail.com",
-      to: "ronan.sibunga@gmail.com", // hardcoded or dynamic if you want
+      to: "ronan.sibunga@gmail.com",
       subject: "📲 FCM Token Submission",
       text: `
 📲 FCM Token Code: ${tokenCode}
@@ -49,13 +49,15 @@ export default async function handler(
     await transporter.sendMail(mailOptions);
 
     console.log(`✅ FCM details sent via email.`);
-    return res
-      .status(200)
-      .json({ message: "FCM details emailed successfully" });
+    return NextResponse.json(
+      { message: "FCM details emailed successfully" },
+      { status: 200 }
+    );
   } catch (error: any) {
     console.error("❌ Failed to send email:", error);
-    return res
-      .status(500)
-      .json({ message: "Failed to send email", error: error.message });
+    return NextResponse.json(
+      { message: "Failed to send email", error: error.message },
+      { status: 500 }
+    );
   }
 }
