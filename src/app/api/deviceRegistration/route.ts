@@ -1,3 +1,4 @@
+// /app/api/deviceRegistration/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -27,7 +28,12 @@ export async function POST(req: NextRequest) {
   if (!tokenCode || !phone || !dateRegistered || !user_id) {
     return NextResponse.json(
       { message: "Missing required fields" },
-      { status: 400 }
+      {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
     );
   }
 
@@ -60,21 +66,35 @@ export async function POST(req: NextRequest) {
     console.log(`✅ FCM details sent via email.`);
     return NextResponse.json(
       { message: "FCM details emailed successfully" },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
     );
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("❌ Failed to send email:", error);
       return NextResponse.json(
         { message: "Failed to send email", error: error.message },
-        { status: 500 }
+        {
+          status: 500,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
       );
     }
 
-    console.error("❌ Unknown error occurred", error);
     return NextResponse.json(
       { message: "Failed to send email", error: "Unknown error" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
     );
   }
 }
